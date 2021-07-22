@@ -53,7 +53,7 @@ public class Monster : MonoBehaviour
     {
         dir = PlayerObj.transform.position - transform.position;
         distance = dir.sqrMagnitude;
-        Debug.LogError(states);
+        //Debug.LogError(states);
 
         CheckStates();
     }

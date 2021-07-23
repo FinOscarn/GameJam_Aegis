@@ -28,10 +28,6 @@ public class Monster : MonoBehaviour, IDamageable
     public MonsterType monsterType = MonsterType.rangedMonster;
     public States states = States.Chase;
 
-    [Header("대포전용")]
-    public GameObject CanonHead;
-    public Canon canonState;
-
     [Header("플레이어 관련")]
     public GameObject PlayerObj;
     public Player player;
@@ -51,6 +47,9 @@ public class Monster : MonoBehaviour, IDamageable
     
     public GameObject projectTile;
 
+    public Transform pos;
+    public Vector2 boxSize;
+
     Vector2 dir;
     Rigidbody2D rb;
     public float distance;
@@ -68,6 +67,8 @@ public class Monster : MonoBehaviour, IDamageable
 
     float stiffnessTime = 0.1f;
 
+    float timer = 0f;
+
     private void Awake() 
     {
         sprite = GetComponent<SpriteRenderer>();
@@ -77,17 +78,12 @@ public class Monster : MonoBehaviour, IDamageable
         PlayerObj = player.gameObject;
         rb = GetComponent<Rigidbody2D>();
         StartStates(States.Patrolling);
-
-        
-        
     }
 
     private void Update() 
     {
         dir = PlayerObj.transform.position - transform.position;
         distance = dir.sqrMagnitude;
-
-        
     }
 
     private void FixedUpdate() 
@@ -99,12 +95,28 @@ public class Monster : MonoBehaviour, IDamageable
     {
         if(monsterType == MonsterType.rangedMonster)
         {
-            //원거리 몹
-            Instantiate(projectTile, transform.position, Quaternion.identity);
+
+            timer += Time.deltaTime;
+            
+            if(timer > attackSpeed)
+            {
+                Instantiate(projectTile, transform.position, Quaternion.identity);
+                timer = 0;
+            }
+
         }
         else if(monsterType == MonsterType.meleeMonster)
         {
-            //근거리 몹
+            Collider2D[] collider2Ds = Physics2D.OverlapBoxAll(pos.position, boxSize, 0);
+            foreach(Collider2D collider in collider2Ds)
+            {
+                Debug.Log(collider.tag);
+                if(collider.CompareTag("Player"))
+                {
+                    collider.GetComponent<Player>().hp--;
+                    collider.GetComponent<Player>().OnDamaged(transform.position);
+                }
+            }
         }
     }
 
@@ -144,13 +156,6 @@ public class Monster : MonoBehaviour, IDamageable
         if(realDir == -1) sr.flipX = true;
         else if(realDir == 1) sr.flipX = false;
 
-        if(canonState == Canon.Canon)
-        {
-            sprite = transform.GetChild(1).GetComponent<SpriteRenderer>();
-
-            if(realDir == -1) sprite.flipX = true;
-            else if(realDir == 1) sprite.flipX = false;
-        }
     }
 
     void StartStates(States _states)
@@ -202,11 +207,25 @@ public class Monster : MonoBehaviour, IDamageable
 
     public void OnDamage(float playDamage)
     {
+        
         hp -= playDamage;
+
+        Debug.Log("몬스터가 데미지 입음");
+
+        sr.DOColor(Color.black,0.1f).OnComplete(() => {
+            sr.DOColor(Color.white, 0.5f);
+        });
 
         if(hp < 0)
         {
-            //sr.color = 
+            DataManager.Instance.deadMonsterCount++;
+
+            sr.DOColor(Color.black, 0.1f).OnComplete(() =>{
+                sr.DOFade(0f, 0.3f).OnComplete(() => {
+                    Destroy(this.gameObject);
+                    DataManager.Instance.monsters.RemoveAt(0);
+                });
+            });
         }
     }
 
@@ -214,5 +233,11 @@ public class Monster : MonoBehaviour, IDamageable
     {
        
         
+    } 
+
+    void OnDrawGizmos() 
+    {
+        Gizmos.color = Color.blue;
+        Gizmos.DrawWireCube(pos.position, boxSize);
     }
 }

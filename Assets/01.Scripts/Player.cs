@@ -5,6 +5,10 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+
+    public GameObject PlayerHpbar;
+    public GameObject DoppelHpbar;
+
     protected bool isGround = true;
 
     protected Rigidbody2D rb;
@@ -51,6 +55,9 @@ public class Player : MonoBehaviour
         stageManager = FindObjectOfType<StageManager>();
         animator = GetComponent<Animator>();
         sr = GetComponent<SpriteRenderer>();
+
+        PlayerHpbar = GameObject.Find("Canvas/Player");
+
         isGround = true;
     }
 
@@ -64,6 +71,12 @@ public class Player : MonoBehaviour
         CheckGround();
         Attack();
         SetAnim();
+        Hpbar();
+    }
+
+    void Hpbar()
+    {
+        PlayerHpbar.transform.position = Camera.main.WorldToScreenPoint(transform.position + new Vector3(0, 1.2f ,0));
     }
 
     public void PlayerMove()
@@ -119,6 +132,19 @@ public class Player : MonoBehaviour
         }
     }
 
+    public void LevelUpCheck()
+    {
+        if(DataManager.Instance.PlayerEx == 12)
+        {
+            DataManager.Instance.PlayerLv++;
+        }
+        
+        if(DataManager.Instance.DoppelEx == 6)
+        {
+            DataManager.Instance.DoppelgangerLv++;
+        }
+    }
+
     public virtual void DoppelgangerMove()
     {
         Vector2 dir = Monster.transform.position - transform.position;
@@ -164,14 +190,42 @@ public class Player : MonoBehaviour
     {
         if(other.transform.CompareTag("Potal"))
         {
-            //다음스테이지 이동 함수 실행
-            Debug.Log("포탈포탈");
-            stageManager.NextStage();
+            if(Input.GetKeyDown(KeyCode.Space))
+            {
+                //다음스테이지 이동 함수 실행
+                Debug.Log("포탈포탈");
+                stageManager.NextStage();
+            }
         }
         if(other.transform.CompareTag("Ground"))
         {
             GetComponent<BoxCollider2D>().isTrigger = true;
         }
+
+        if(other.transform.CompareTag("Enemy"))
+        {
+            OnDamaged(other.transform.position);
+        }
+    }
+
+    public void OnDamaged(Vector2 targetPos)
+    {
+        hp--;
+        gameObject.layer = 10;
+
+        sr.color = new Color(1,1,1,0.4f);
+
+        int dirc = transform.position.x - targetPos.x > 0 ? 1 : -1;
+
+        rb.AddForce(new Vector2(dirc, 0)*3f, ForceMode2D.Impulse);
+        
+        Invoke("OffDamaged", 1f);
+    }
+
+    void OffDamaged()
+    {
+        gameObject.layer = 9;
+        sr.color = new Color(1, 1, 1, 1);
     }
 
     private void OnTriggerExit2D(Collider2D other) 
@@ -181,10 +235,6 @@ public class Player : MonoBehaviour
             GetComponent<BoxCollider2D>().isTrigger = false;
         }
     }
-
-    void OnDrawGizmos() 
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireCube(pos.position, boxSize);
-    }
+    
+    
 }

@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 7862832640671868784}
   m_Layer: 0
   m_Name: IceEnemy
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -109,7 +109,9 @@ MonoBehaviour:
   defensePower: 0
   range: 0
   attackRange: 4
-  projectTile: {fileID: 0}
+  projectTile: {fileID: 3860073960024847077, guid: 8bd61fa5e08ecf646abe2ea0c76dde7d, type: 3}
+  pos: {fileID: 0}
+  boxSize: {x: 0, y: 0}
   distance: 0
 --- !u!95 &7862832640671868788
 Animator:

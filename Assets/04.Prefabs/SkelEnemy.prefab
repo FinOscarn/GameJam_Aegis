@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 1916193519369395471}
   m_Layer: 0
   m_Name: SkelEnemy
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -104,12 +104,14 @@ MonoBehaviour:
   player: {fileID: 0}
   hp: 0
   attackDamage: 0
-  attackSpeed: 0
+  attackSpeed: 0.5
   moveSpeed: 3
   defensePower: 0
-  range: 0
-  attackRange: 0
-  projectTile: {fileID: 0}
+  range: 5
+  attackRange: 5
+  projectTile: {fileID: 7691295181829865623, guid: 9fa646bd58f03b24e8b60386a2069a7a, type: 3}
+  pos: {fileID: 0}
+  boxSize: {x: 0, y: 0}
   distance: 0
 --- !u!61 &1916193519369395473
 BoxCollider2D:

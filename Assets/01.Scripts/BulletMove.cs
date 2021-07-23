@@ -6,10 +6,10 @@ public class BulletMove : MonoBehaviour
 {
     public GameObject player;
 
-    float speed = 8f;
-    Vector2 dir;
+    protected float speed = 4f;
+    protected Vector2 dir;
 
-    private void Start() 
+    public virtual void Start() 
     {
         player = GameObject.Find("Player");
         dir = player.transform.position - transform.position;
@@ -20,8 +20,16 @@ public class BulletMove : MonoBehaviour
         transform.Translate( dir * speed * Time.deltaTime);
     }
 
-    private void OnTriggerEnter2D(Collider2D other) 
+    public virtual void OnTriggerEnter2D(Collider2D other) 
     {
+        if(other.gameObject.CompareTag("Player"))
+        {
+            other.GetComponent<Player>().OnDamaged(this.transform.position);
+        }
+        else if(other.gameObject.CompareTag("Enemy"))
+        {
+            other.GetComponent<Monster>().OnDamage(other.GetComponent<Player>().attackDamage);
+        }
         Destroy(this.gameObject);
     }
 }

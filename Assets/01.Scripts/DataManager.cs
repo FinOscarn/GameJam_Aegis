@@ -39,6 +39,18 @@ public class DataManager : MonoBehaviour
 
     public List<GameObject> monsters = new List<GameObject>();
 
+    [Header("플레이어 관련")]
+    public int PlayerLv = 1;
+    public float PlayerEx = 0f;
+
+    [Header("도플갱어 관련")]
+    public int DoppelgangerLv = 1;
+    public float DoppelEx = 0f;
+
+    public int deadMonsterCount= 0;
+
+    public int curStage;
+
 
     
 

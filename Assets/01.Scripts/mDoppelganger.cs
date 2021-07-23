@@ -19,11 +19,19 @@ public class mDoppelganger : Player
     {
         base.Start();
         Init();
+        DoppelHpbar = GameObject.Find("Canvas/Doppelganger");
     }
 
     public override void Update() 
     {
         Monster = DataManager.Instance.monsters[0];
+        Hpbar();
+
+    }
+
+    void Hpbar()
+    {
+        DoppelHpbar.transform.position = Camera.main.WorldToScreenPoint(transform.position + new Vector3(0, 1.2f ,0));
     }
 
     void Init()
@@ -65,9 +73,19 @@ public class mDoppelganger : Player
         }
     }
 
-    void Attack()
+    new void Attack()
     {
+        isMove = false;
         Debug.Log("Attack");
+        Collider2D[] collider2Ds = Physics2D.OverlapBoxAll(pos.position, boxSize, 0);
+        foreach(Collider2D collider in collider2Ds)
+        {
+            Debug.Log(collider.tag);
+            if(collider.CompareTag("Enemy"))
+            {
+                collider.GetComponent<Monster>().OnDamage(attackDamage);
+            }
+        }
     }
 
     void Teleport()
@@ -111,13 +129,17 @@ public class mDoppelganger : Player
             case States.Chase:
                 if(distance > attackRange * attackRange) StartStates(States.Chase);
                 if(distance < (attackRange * attackRange)&& Time.time > attackSpeed) StartStates(States.Attack);
-                //Debug.Log("Chase");
             break;
             case States.Attack:
                 if(Time.time > 0.5f) StartStates(States.Chase);
-                //Debug.Log("attack");
             break;
         }
+    }
+
+    void OnDrawGizmos() 
+    {
+        Gizmos.color = Color.blue;
+        Gizmos.DrawWireCube(pos.position, boxSize);
     }
     
 }

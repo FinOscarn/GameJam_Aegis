@@ -1,5 +1,35 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1085092755
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1085092756}
+  m_Layer: 0
+  m_Name: Pos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1085092756
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1085092755}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1.59, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 279956320829621704}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &279956320829621703
 GameObject:
   m_ObjectHideFlags: 0
@@ -14,9 +44,9 @@ GameObject:
   - component: {fileID: 279956320829621706}
   - component: {fileID: 279956320829621707}
   - component: {fileID: 279956320829621709}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: VamEnemy
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -31,7 +61,8 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.78999996, y: -3.5299997, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 1085092756}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -102,7 +133,7 @@ MonoBehaviour:
   states: 1
   PlayerObj: {fileID: 0}
   player: {fileID: 0}
-  hp: 0
+  hp: 4
   attackDamage: 0
   attackSpeed: 0
   moveSpeed: 4
@@ -110,6 +141,9 @@ MonoBehaviour:
   range: 4
   attackRange: 2
   projectTile: {fileID: 0}
+  pos: {fileID: 1085092756}
+  boxSize: {x: 1.25, y: 2}
+  distance: 0
 --- !u!61 &279956320829621706
 BoxCollider2D:
   m_ObjectHideFlags: 0

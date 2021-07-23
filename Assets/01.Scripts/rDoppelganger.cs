@@ -22,6 +22,11 @@ public class rDoppelganger : Player
 
     public override void Update() 
     {
+        
+    }
+
+    private void FixedUpdate() 
+    {
         CheckStates();
     }
 

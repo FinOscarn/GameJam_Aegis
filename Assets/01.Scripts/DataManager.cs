@@ -2,9 +2,44 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DataManager : Singleton<DataManager>
+public class DataManager : MonoBehaviour
 {
     
+    private static DataManager instance;
+    public static DataManager Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                instance = FindObjectOfType<DataManager>();
+
+                if (instance == null)
+                {
+                    Debug.LogError("게임메니져가 존재하지 않습니다!");
+                }
+            }
+
+            return instance;
+        }
+    }
+
+    private void Awake()
+    {
+        if (instance == null)                       // 만약 instance가 비어있다면
+        {
+            instance = this;
+            DontDestroyOnLoad(this.gameObject);
+        }
+        else if(instance != this)                   // 비어있진 않은데 instance가 자신이 아니라면
+        {
+            Destroy(this.gameObject);
+        }
+    }
+
+    public List<GameObject> monsters = new List<GameObject>();
+
 
     
+
 }

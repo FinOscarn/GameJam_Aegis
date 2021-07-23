@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
-public class Monster : MonoBehaviour
+public class Monster : MonoBehaviour, IDamageable
 {
     public enum MonsterType
     {
@@ -27,40 +28,57 @@ public class Monster : MonoBehaviour
     [Header("스텟")]
     public float hp;
     public float attackDamage;
-    public float defensePower;
     public float attackSpeed;
     public float moveSpeed;
+    
+    [Header("방어력")]
+    public float defensePower;
+    [Header("인식범위")]
     public float range;
+    [Header("공격범위")]
     public float attackRange;
-
+    
     public GameObject projectTile;
 
     Vector2 dir;
+    Rigidbody2D rb;
     float distance;
+
+    Animator animator;
+
+    SpriteRenderer sr;
 
     bool isPatrolling;
     bool isAttack;
     bool isMove;
 
-    private void Start() 
+    float cooltime = 1.2f;
+
+    float stiffnessTime = 0.1f;
+
+    private void Awake() 
     {
+        sr = GetComponent<SpriteRenderer>();
+        animator = GetComponent<Animator>();
         player = FindObjectOfType<Player>();
+        PlayerObj = player.gameObject;
+        rb = GetComponent<Rigidbody2D>();
         StartStates(States.Patrolling);
     }
-
 
     private void Update() 
     {
         dir = PlayerObj.transform.position - transform.position;
         distance = dir.sqrMagnitude;
-        //Debug.LogError(states);
+    }
 
+    private void FixedUpdate() 
+    {
         CheckStates();
     }
 
     void Attack()
     {
-
         if(monsterType == MonsterType.rangedMonster)
         {
             //원거리 몹
@@ -74,12 +92,27 @@ public class Monster : MonoBehaviour
 
     void Pattrol()
     {
-        if(isMove) transform.Translate(new Vector2((Random.Range(-1 , 1))*moveSpeed* Time.deltaTime ,0));
+        if(isMove) 
+        {
+            int randomIndex = Random.Range(-1, 1);
+
+            if(randomIndex == 0)
+            {
+                isMove = false;
+            }
+            else 
+            {
+                rb.velocity = new Vector2(randomIndex * moveSpeed, 0);  
+            }
+        }
     }
 
     void Chase()
     {
-        if(isMove) transform.Translate(dir * moveSpeed* Time.deltaTime);
+        float realDir = dir.x > 0 ? 1 : -1;
+        if(isMove) rb.velocity = dir.normalized * moveSpeed;
+        if(realDir == -1) sr.flipX = true;
+        else if(realDir == 1) sr.flipX = false;
     }
 
     void StartStates(States _states)
@@ -89,15 +122,20 @@ public class Monster : MonoBehaviour
         {
             case States.Patrolling:
             isMove = true;
-            Pattrol();
+            Invoke("Pattrol", cooltime);
+            cooltime = Time.time + 1f;
+            Debug.Log("Pattrol");
             break;
             case States.Chase:
+            animator.SetBool("IsWalk", true);
             isMove = true;
+            Debug.Log("Chase");
             Chase();
             break;
             case States.Attack:
+            animator.SetTrigger("IsAttack");
             isMove = false;
-            attackSpeed = Time.time + 1f; 
+            Debug.Log("Attack");
             Attack();
             break;
         }
@@ -112,24 +150,30 @@ public class Monster : MonoBehaviour
                 //Debug.Log("Pattrol");
             break;
             case States.Chase:
-                if(distance > attackRange * attackRange) StartStates(States.Patrolling);
+                if(distance > attackRange * attackRange && Time.time > cooltime) StartStates(States.Patrolling);
                 if(distance < (attackRange * attackRange) && Time.time > attackSpeed) StartStates(States.Attack);
                 //Debug.Log("Chase");
             break;
             case States.Attack:
-                if(Time.time > 0.5f) StartStates(States.Chase);
+                if(Time.time > 1f) StartStates(States.Chase);
                 //Debug.Log("attack");
             break;
         }
     }
 
-    void Damage()
+    public void OnDamage(float playDamage)
     {
-        player.hp -= attackDamage;
+        hp -= playDamage;
+
+        if(hp < 0)
+        {
+            //sr.color = 
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D other) 
     {
-        Damage();
+       
+        
     }
 }

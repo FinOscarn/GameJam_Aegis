@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Ground
   - Potal
+  - celling
   layers:
   - Default
   - TransparentFX

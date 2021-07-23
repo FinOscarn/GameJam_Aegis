@@ -23,20 +23,25 @@ public class mDoppelganger : Player
 
     public override void Update() 
     {
-        CheckStates();
+        Monster = DataManager.Instance.monsters[0];
     }
 
     void Init()
     {
+        
         attackSpeed = 2f;
         attackRange = 6f;
         jumpSpeed = 5f;
     }
 
+    private void FixedUpdate() 
+    {
+        CheckStates();
+    }
+
     void CheckPlatform()
     {
-        Debug.DrawRay(transform.position, Vector2.up * 7f, Color.red);
-        Debug.Log("SAdasd");
+        Debug.DrawRay(transform.position, Vector2.up * 4f, Color.red);
         RaycastHit2D hitY = Physics2D.Raycast(transform.position, Vector2.up, 7f);
         if(hitY)
         {
@@ -48,6 +53,7 @@ public class mDoppelganger : Player
             }
         }
 
+        Debug.DrawRay(transform.position, Vector2.right * 3f, Color.red);
         RaycastHit2D hitX = Physics2D.Raycast(transform.position, Vector2.right, 3f);
         if(hitX)
         {
@@ -66,8 +72,13 @@ public class mDoppelganger : Player
 
     void Teleport()
     {
-        if(transform.position.x == Monster.transform.position.x)
+        int curTr = Mathf.RoundToInt(transform.position.x);
+        int monTr = Mathf.RoundToInt(Monster.transform.position.x);
+
+        if(curTr == monTr)                                                                                                            
         {
+            Debug.Log("apsdasd");
+
             transform.position = Monster.transform.position;
         }
     }
@@ -79,11 +90,13 @@ public class mDoppelganger : Player
         {
             case States.Chase:
             isMove = true;
+            animator.SetBool("isWalk", true);
             DoppelgangerMove();
             CheckPlatform();
             Teleport();
             break;
             case States.Attack:
+            animator.SetTrigger("IsAttack");
             isMove = false;
             attackSpeed = Time.time + 1f; 
             Attack();
@@ -97,12 +110,12 @@ public class mDoppelganger : Player
         {
             case States.Chase:
                 if(distance > attackRange * attackRange) StartStates(States.Chase);
-                if(distance < (attackRange * attackRange)) StartStates(States.Attack);
-                Debug.Log("Chase");
+                if(distance < (attackRange * attackRange)&& Time.time > attackSpeed) StartStates(States.Attack);
+                //Debug.Log("Chase");
             break;
             case States.Attack:
                 if(Time.time > 0.5f) StartStates(States.Chase);
-                Debug.Log("attack");
+                //Debug.Log("attack");
             break;
         }
     }

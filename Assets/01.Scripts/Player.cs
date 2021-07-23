@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Player : MonoBehaviour
@@ -43,14 +44,17 @@ public class Player : MonoBehaviour
         isGround = true;
     }
 
-    public virtual void Update()
+    public void FixedUpdate() 
     {
         PlayerMove();
+    }
+
+    public virtual void Update()
+    {   
+        
         CheckGround();
         Attack();
         SetAnim();
-
-        Debug.Log(isGround);
 
     }
 
@@ -63,7 +67,6 @@ public class Player : MonoBehaviour
         if(h != 0)
         {
             states = PlayerStates.walk;
-            Debug.Log("walk");
         }
         else
         {
@@ -101,9 +104,7 @@ public class Player : MonoBehaviour
         distance = dir.sqrMagnitude;
         float realDir = dir.x > 0 ? 1 : -1;
 
-        rb.MovePosition(rb.position + new Vector2(realDir, 0) * speed * Time.deltaTime);
-
-        Debug.Log("asdasd");
+        rb.velocity = new Vector2( realDir * speed ,rb.velocity.y);
     }
 
     public void CheckGround()

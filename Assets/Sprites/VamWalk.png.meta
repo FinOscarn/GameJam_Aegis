@@ -1,28 +1,19 @@
 fileFormatVersion: 2
-guid: 5d5c4df51efc3764ab5d481c4248f3b0
+guid: cc4af4b0464e6084e911d7ffcfcefac6
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -1663868251260904340
-    second: VamIdle_0
+      213: -5003894849684470425
+    second: VamWalk_0
   - first:
-      213: 300249607917396500
-    second: VamIdle_1
+      213: 4331109410968807150
+    second: VamWalk_1
   - first:
-      213: 4635902799681597911
-    second: VamIdle_2
+      213: -381552620154475352
+    second: VamWalk_2
   - first:
-      213: -2475166755545517835
-    second: VamIdle_3
-  - first:
-      213: 4060387836046083487
-    second: VamIdle_4
-  - first:
-      213: 8164853555104322342
-    second: VamIdle_5
-  - first:
-      213: 2461417823092957667
-    second: VamIdle_6
+      213: 2029742472569289510
+    second: VamWalk_3
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -124,12 +115,12 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: VamIdle_0
+      name: VamWalk_0
       rect:
         serializedVersion: 2
-        x: 1
+        x: 2
         y: 0
-        width: 30
+        width: 28
         height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -138,19 +129,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c6c1b8a14a0c8e8e0800000000000000
-      internalID: -1663868251260904340
+      spriteID: 765862f55289e8ab0800000000000000
+      internalID: -5003894849684470425
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: VamIdle_1
+      name: VamWalk_1
       rect:
         serializedVersion: 2
-        x: 33
+        x: 34
         y: 0
-        width: 30
+        width: 28
         height: 31
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -159,20 +150,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 412edd77d63ba2400800000000000000
-      internalID: 300249607917396500
+      spriteID: ee6a524ef013b1c30800000000000000
+      internalID: 4331109410968807150
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: VamIdle_2
+      name: VamWalk_2
       rect:
         serializedVersion: 2
-        x: 65
+        x: 66
         y: 0
-        width: 30
-        height: 30
+        width: 29
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -180,14 +171,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 7d1b244c809065040800000000000000
-      internalID: 4635902799681597911
+      spriteID: 8aca29cd9e374baf0800000000000000
+      internalID: -381552620154475352
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: VamIdle_3
+      name: VamWalk_3
       rect:
         serializedVersion: 2
         x: 98
@@ -201,71 +192,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 5f07ad723f076add0800000000000000
-      internalID: -2475166755545517835
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: VamIdle_4
-      rect:
-        serializedVersion: 2
-        x: 130
-        y: 0
-        width: 28
-        height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: f9508d95935695830800000000000000
-      internalID: 4060387836046083487
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: VamIdle_5
-      rect:
-        serializedVersion: 2
-        x: 161
-        y: 0
-        width: 30
-        height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 62314139c036f4170800000000000000
-      internalID: 8164853555104322342
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: VamIdle_6
-      rect:
-        serializedVersion: 2
-        x: 193
-        y: 0
-        width: 30
-        height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 3e1654d0876b82220800000000000000
-      internalID: 2461417823092957667
+      spriteID: 62bf30756081b2c10800000000000000
+      internalID: 2029742472569289510
       vertices: []
       indices: 
       edges: []

@@ -1,18 +1,24 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
+using TMPro;
 
-public class ToolTip : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+public class ToolTip : MonoBehaviour
 {
-    public void OnPointerEnter(PointerEventData eventData)
-    {
-        throw new System.NotImplementedException();
-    }
+    public TextMeshProUGUI roleTxt;
 
-    public void OnPointerExit(PointerEventData eventData)
+    public void PSelectTxt(string role)
     {
-        throw new System.NotImplementedException();
+        roleTxt.text = role;
     }
+    /*public void ItemTxt1(string a, float atk, float def, float hp)
+    {
+
+    }
+    public void ItemTxt2(string a, float atk, float def)
+    {
+
+    }
+    public void ItemTxt3(string a, float atk, )*/
 
 }

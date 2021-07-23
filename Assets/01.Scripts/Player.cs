@@ -12,6 +12,8 @@ public class Player : MonoBehaviour
 
     public GameObject Monster;
 
+    public GameObject Weapon;
+
     public Animator animator;
     public SpriteRenderer sr;
 
@@ -26,6 +28,9 @@ public class Player : MonoBehaviour
 
     public float distance;
 
+    public Transform pos;
+    public Vector2 boxSize;
+
     public enum PlayerStates
     {
         idle,
@@ -33,6 +38,11 @@ public class Player : MonoBehaviour
         attack,
         die
     }
+
+    float angle;
+    Vector2 mouse;
+    Vector2 target;
+
     PlayerStates states = PlayerStates.idle;
 
     public virtual void Start()
@@ -51,11 +61,9 @@ public class Player : MonoBehaviour
 
     public virtual void Update()
     {   
-        
         CheckGround();
         Attack();
         SetAnim();
-
     }
 
     public void PlayerMove()
@@ -86,16 +94,29 @@ public class Player : MonoBehaviour
         {
             rb.AddForce(Vector2.up*jumpSpeed, ForceMode2D.Impulse);
         }
+
+        mouse = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        angle = Mathf.Atan2(target.y - transform.position.y, target.x - transform.position.x) * Mathf.Rad2Deg;
+        Weapon.transform.rotation = Quaternion.AngleAxis(angle-90, Vector3.forward);
     }
 
     public virtual void Attack()
     {
         if(Input.GetMouseButtonDown(0))
         {
-            //상속해서 어택하면댐
             states = PlayerStates.attack;
+
+            Collider2D[] collider2Ds = Physics2D.OverlapBoxAll(pos.position, boxSize, 0);
+            foreach(Collider2D collider in collider2Ds)
+            {
+                Debug.Log(collider.tag);
+                if(collider.CompareTag("Enemy"))
+                {
+                    collider.GetComponent<Monster>().OnDamage(attackDamage);
+                }
+            }
+
         }
-        
     }
 
     public virtual void DoppelgangerMove()
@@ -159,6 +180,11 @@ public class Player : MonoBehaviour
         {
             GetComponent<BoxCollider2D>().isTrigger = false;
         }
-        
+    }
+
+    void OnDrawGizmos() 
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireCube(pos.position, boxSize);
     }
 }

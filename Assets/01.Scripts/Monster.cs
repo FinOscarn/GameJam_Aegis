@@ -13,13 +13,24 @@ public class Monster : MonoBehaviour, IDamageable
 
     public enum States
     {
+        Idle,
         Patrolling,
         Chase,
         Attack
     }
 
+    public enum Canon
+    {
+        other,
+        Canon
+    }
+
     public MonsterType monsterType = MonsterType.rangedMonster;
     public States states = States.Chase;
+
+    [Header("대포전용")]
+    public GameObject CanonHead;
+    public Canon canonState;
 
     [Header("플레이어 관련")]
     public GameObject PlayerObj;
@@ -42,11 +53,12 @@ public class Monster : MonoBehaviour, IDamageable
 
     Vector2 dir;
     Rigidbody2D rb;
-    float distance;
+    public float distance;
 
     Animator animator;
 
     SpriteRenderer sr;
+    SpriteRenderer sprite;
 
     bool isPatrolling;
     bool isAttack;
@@ -58,18 +70,24 @@ public class Monster : MonoBehaviour, IDamageable
 
     private void Awake() 
     {
+        sprite = GetComponent<SpriteRenderer>();
         sr = GetComponent<SpriteRenderer>();
         animator = GetComponent<Animator>();
         player = FindObjectOfType<Player>();
         PlayerObj = player.gameObject;
         rb = GetComponent<Rigidbody2D>();
         StartStates(States.Patrolling);
+
+        
+        
     }
 
     private void Update() 
     {
         dir = PlayerObj.transform.position - transform.position;
         distance = dir.sqrMagnitude;
+
+        
     }
 
     private void FixedUpdate() 
@@ -90,52 +108,75 @@ public class Monster : MonoBehaviour, IDamageable
         }
     }
 
+   
+
     void Pattrol()
     {
         if(isMove) 
         {
-            int randomIndex = Random.Range(-1, 1);
+            int randomIndex = Random.Range(-1, 2);
+
+            Debug.Log(randomIndex);
 
             if(randomIndex == 0)
             {
                 isMove = false;
+                
             }
             else 
             {
-                rb.velocity = new Vector2(randomIndex * moveSpeed, 0);  
+                rb.velocity = new Vector2(randomIndex * moveSpeed, rb.velocity.y);  
             }
+
+            if(randomIndex == -1) sr.flipX = true;
+            else if(randomIndex == 1) sr.flipX = false;
         }
     }
 
-    void Chase()
+    public virtual void Chase()
     {
         float realDir = dir.x > 0 ? 1 : -1;
-        if(isMove) rb.velocity = dir.normalized * moveSpeed;
+        if(isMove) 
+        {
+            rb.velocity = new Vector2(realDir * moveSpeed, rb.velocity.y);
+        }
+
         if(realDir == -1) sr.flipX = true;
         else if(realDir == 1) sr.flipX = false;
+
+        if(canonState == Canon.Canon)
+        {
+            sprite = transform.GetChild(1).GetComponent<SpriteRenderer>();
+
+            if(realDir == -1) sprite.flipX = true;
+            else if(realDir == 1) sprite.flipX = false;
+        }
     }
 
     void StartStates(States _states)
     {
+        Debug.Log(states);
         states = _states;
         switch(states)
         {
+            case States.Idle:
+            animator.SetBool("IsWalk", false);
+            break;
             case States.Patrolling:
+            animator.SetBool("IsWalk", true);
             isMove = true;
             Invoke("Pattrol", cooltime);
-            cooltime = Time.time + 1f;
-            Debug.Log("Pattrol");
+            cooltime = Time.time + 2f;
             break;
             case States.Chase:
             animator.SetBool("IsWalk", true);
             isMove = true;
-            Debug.Log("Chase");
             Chase();
             break;
             case States.Attack:
             animator.SetTrigger("IsAttack");
+            animator.SetBool("IsWalk", false);
             isMove = false;
-            Debug.Log("Attack");
             Attack();
             break;
         }
@@ -147,16 +188,14 @@ public class Monster : MonoBehaviour, IDamageable
         {
             case States.Patrolling:
                 if(distance < (range * range)) StartStates(States.Chase);
-                //Debug.Log("Pattrol");
+                if(Time.time > cooltime) StartStates(States.Patrolling);
             break;
             case States.Chase:
-                if(distance > attackRange * attackRange && Time.time > cooltime) StartStates(States.Patrolling);
+                if(distance > range * range && Time.time > cooltime) StartStates(States.Patrolling);
                 if(distance < (attackRange * attackRange) && Time.time > attackSpeed) StartStates(States.Attack);
-                //Debug.Log("Chase");
             break;
             case States.Attack:
                 if(Time.time > 1f) StartStates(States.Chase);
-                //Debug.Log("attack");
             break;
         }
     }

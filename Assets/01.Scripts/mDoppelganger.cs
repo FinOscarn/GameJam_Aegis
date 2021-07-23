@@ -15,16 +15,15 @@ public class mDoppelganger : Player
 
     bool isMove = true;
 
-    void Start() 
+    public override void Start() 
     {
-        rb = GetComponent<Rigidbody2D>();
+        base.Start();
         Init();
     }
 
-    void Update() 
+    public override void Update() 
     {
         CheckStates();
-        Teleport();
     }
 
     void Init()
@@ -82,6 +81,7 @@ public class mDoppelganger : Player
             isMove = true;
             DoppelgangerMove();
             CheckPlatform();
+            Teleport();
             break;
             case States.Attack:
             isMove = false;

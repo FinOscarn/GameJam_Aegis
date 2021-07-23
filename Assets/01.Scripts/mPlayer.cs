@@ -5,9 +5,9 @@ using UnityEngine;
 public class mPlayer : Player
 {
 
-    void Start()
+    public override void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
+        base.Start();
         Init();
     }
 

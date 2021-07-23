@@ -11,7 +11,8 @@ public class Player : MonoBehaviour
 
     public GameObject Monster;
 
-    Animator animator;
+    public Animator animator;
+    public SpriteRenderer sr;
 
     [Header("플레이어 스텟")]
     public float hp;
@@ -33,35 +34,51 @@ public class Player : MonoBehaviour
     }
     PlayerStates states = PlayerStates.idle;
 
-    public void Start()
+    public virtual void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         stageManager = FindObjectOfType<StageManager>();
         animator = GetComponent<Animator>();
+        sr = GetComponent<SpriteRenderer>();
         isGround = true;
     }
 
-    public void Update()
+    public virtual void Update()
     {
         PlayerMove();
         CheckGround();
+        Attack();
+        SetAnim();
 
         Debug.Log(isGround);
 
-        ;
     }
 
     public void PlayerMove()
     {
         float h = Input.GetAxisRaw("Horizontal");
         
-        transform.Translate(new Vector2(speed*h*Time.deltaTime, 0));
+        rb.velocity = new Vector2( h* speed ,rb.velocity.y);
 
         if(h != 0)
         {
             states = PlayerStates.walk;
+            Debug.Log("walk");
+        }
+        else
+        {
+            states = PlayerStates.idle;
         }
         
+        if(h < 0)
+        {
+            sr.flipX = true;
+        }
+        else if (h > 0)
+        {
+            sr.flipX = false;
+        }
+
         if(Input.GetButtonDown("Jump") && isGround)
         {
             rb.AddForce(Vector2.up*jumpSpeed, ForceMode2D.Impulse);
@@ -84,7 +101,9 @@ public class Player : MonoBehaviour
         distance = dir.sqrMagnitude;
         float realDir = dir.x > 0 ? 1 : -1;
 
-        transform.Translate(new Vector2(realDir * speed * Time.deltaTime,0));
+        rb.MovePosition(rb.position + new Vector2(realDir, 0) * speed * Time.deltaTime);
+
+        Debug.Log("asdasd");
     }
 
     public void CheckGround()
@@ -92,7 +111,7 @@ public class Player : MonoBehaviour
         isGround = Physics2D.OverlapCircle((Vector2)transform.position + new Vector2(0, -0.8f), 0.3f, 1 << LayerMask.NameToLayer("Ground"));
     }
 
-    public virtual void SetAnim()
+    public void SetAnim()
     {
         switch(states)
         {
@@ -100,10 +119,13 @@ public class Player : MonoBehaviour
             animator.SetBool("isWalk" , false);
             break;
             case PlayerStates.walk:
+            animator.SetBool("isWalk", true);
             break;
             case PlayerStates.attack:
+            animator.SetTrigger("IsAttack");
             break;
             case PlayerStates.die:
+            animator.SetTrigger("isDie");
             break;
         }
     }

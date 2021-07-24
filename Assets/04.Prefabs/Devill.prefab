@@ -150,9 +150,9 @@ MonoBehaviour:
   states: 2
   PlayerObj: {fileID: 0}
   player: {fileID: 0}
-  hp: 0
-  attackDamage: 0
-  attackSpeed: 0
+  hp: 5
+  attackDamage: 1
+  attackSpeed: 2
   moveSpeed: 2
   defensePower: 0
   range: 5

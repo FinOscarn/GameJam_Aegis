@@ -35,6 +35,8 @@ public class Player : MonoBehaviour
     public Transform pos;
     public Vector2 boxSize;
 
+    public float realDir;
+
     public enum PlayerStates
     {
         idle,
@@ -149,9 +151,11 @@ public class Player : MonoBehaviour
     {
         Vector2 dir = Monster.transform.position - transform.position;
         distance = dir.sqrMagnitude;
-        float realDir = dir.x > 0 ? 1 : -1;
+        realDir = dir.x > 0 ? 1 : -1;
 
         rb.velocity = new Vector2( realDir * speed ,rb.velocity.y);
+
+        
     }
 
     public void CheckGround()
@@ -186,11 +190,11 @@ public class Player : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter2D(Collider2D other) 
+    private void OnTriggerStay2D(Collider2D other) 
     {
         if(other.transform.CompareTag("Potal"))
         {
-            if(Input.GetKeyDown(KeyCode.Space))
+            if(Input.GetKeyDown(KeyCode.S))
             {
                 //다음스테이지 이동 함수 실행
                 Debug.Log("포탈포탈");

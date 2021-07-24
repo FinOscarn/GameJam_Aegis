@@ -134,7 +134,7 @@ MonoBehaviour:
   PlayerObj: {fileID: 0}
   player: {fileID: 0}
   hp: 4
-  attackDamage: 0
+  attackDamage: 0.2
   attackSpeed: 0
   moveSpeed: 4
   defensePower: 0

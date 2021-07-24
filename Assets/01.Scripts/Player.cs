@@ -196,11 +196,11 @@ public class Player : MonoBehaviour
         {
             if(Input.GetKeyDown(KeyCode.S))
             {
-                //다음스테이지 이동 함수 실행
                 Debug.Log("포탈포탈");
                 stageManager.NextStage();
             }
         }
+        
         if(other.transform.CompareTag("Ground")&& !isGround)
         {
             GetComponent<BoxCollider2D>().isTrigger = true;

@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
-    public Player player;
+    public rPlayer player;
 
     public Slider PlayerHp;
     public Slider DoppelHp;
@@ -17,29 +17,29 @@ public class UIManager : MonoBehaviour
     public GameObject OptionImage;
 
 
+    private void Awake() 
+    {
+        if (PlayerHp.value <= 0)
+            GameObject.Find("PlayerFill").gameObject.SetActive(false);
+        else
+            GameObject.Find("PlayerFill").gameObject.SetActive(true);
+
+        if (DoppelHp.value <= 0)
+            GameObject.Find("DoppelFill").gameObject.SetActive(false);
+        else
+            GameObject.Find("DoppelFill").gameObject.SetActive(true);
+    }
 
     void Start() 
     {
-        player = GetComponent<Player>();
         CurLevel();
         PlayerHp.value = player.hp;
     }
 
     void Update() 
     {
-
-        if (PlayerHp.value <= 0)
-            transform.Find("Fill Area").gameObject.SetActive(false);
-        else
-            transform.Find("Fill Area").gameObject.SetActive(true);
-            
-        if (DoppelHp.value <= 0)
-            transform.Find("Fill Area").gameObject.SetActive(false);
-        else
-            transform.Find("Fill Area").gameObject.SetActive(true);
+        
     }
-
-
 
     void CurLevel()
     {

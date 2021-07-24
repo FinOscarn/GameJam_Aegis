@@ -27,7 +27,6 @@ public class mDoppelganger : Player
     {
         Monster = DataManager.Instance.monsters[0];
         Hpbar();
-        
     }
 
     void Hpbar()
@@ -93,7 +92,10 @@ public class mDoppelganger : Player
     {
         base.DoppelgangerMove();
 
-        if()
+        if(distance > 3000)
+        {
+            transform.position = Monster.transform.position;
+        }
     }
 
     void Teleport()
@@ -146,7 +148,7 @@ public class mDoppelganger : Player
             break;
             case States.Attack:
                 if(Time.time > 0.5f) StartStates(States.Chase);
-                if(DataManager.Instance.monsters == null) StartStates(States.Idle);
+                if(DataManager.Instance.monsters.Count == 0) StartStates(States.Idle);
             break;
         }
     }

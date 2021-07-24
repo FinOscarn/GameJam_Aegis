@@ -50,8 +50,4 @@ public class DataManager : MonoBehaviour
     public int deadMonsterCount= 0;
 
     public int curStage;
-
-
-    
-
 }

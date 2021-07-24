@@ -201,7 +201,7 @@ public class Player : MonoBehaviour
                 stageManager.NextStage();
             }
         }
-        if(other.transform.CompareTag("Ground"))
+        if(other.transform.CompareTag("Ground")&& !isGround)
         {
             GetComponent<BoxCollider2D>().isTrigger = true;
         }
@@ -234,7 +234,7 @@ public class Player : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D other) 
     {
-        if(other.transform.CompareTag("Ground"))
+        if(other.transform.CompareTag("Ground") && !isGround)
         {
             GetComponent<BoxCollider2D>().isTrigger = false;
         }

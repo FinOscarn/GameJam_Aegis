@@ -7,6 +7,7 @@ public class mDoppelganger : Player
 
     public enum States
     {
+        Idle,
         Chase,
         Attack,
         Jump
@@ -26,7 +27,6 @@ public class mDoppelganger : Player
     {
         Monster = DataManager.Instance.monsters[0];
         Hpbar();
-
     }
 
     void Hpbar()
@@ -88,6 +88,16 @@ public class mDoppelganger : Player
         }
     }
 
+    public override void DoppelgangerMove()
+    {
+        base.DoppelgangerMove();
+
+        if(distance > 3000)
+        {
+            transform.position = Monster.transform.position;
+        }
+    }
+
     void Teleport()
     {
         int curTr = Mathf.RoundToInt(transform.position.x);
@@ -106,6 +116,9 @@ public class mDoppelganger : Player
         states = _states;
         switch(states)
         {
+            case States.Idle:
+            animator.SetBool("isWalk" , false);
+            break;
             case States.Chase:
             isMove = true;
             animator.SetBool("isWalk", true);
@@ -126,12 +139,16 @@ public class mDoppelganger : Player
     {
         switch(states)
         {
+            case States.Idle:
+                if(realDir != 0) StartStates(States.Chase);
+                break;
             case States.Chase:
                 if(distance > attackRange * attackRange) StartStates(States.Chase);
                 if(distance < (attackRange * attackRange)&& Time.time > attackSpeed) StartStates(States.Attack);
             break;
             case States.Attack:
                 if(Time.time > 0.5f) StartStates(States.Chase);
+                if(DataManager.Instance.monsters.Count == 0) StartStates(States.Idle);
             break;
         }
     }

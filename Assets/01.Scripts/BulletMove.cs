@@ -4,15 +4,17 @@ using UnityEngine;
 
 public class BulletMove : MonoBehaviour
 {
-    public GameObject player;
+    public GameObject target;
 
     protected float speed = 4f;
     protected Vector2 dir;
 
+    rPlayer rplayer;
+
     public virtual void Start() 
     {
-        player = GameObject.Find("Player");
-        dir = player.transform.position - transform.position;
+        dir = target.transform.position - transform.position;
+        rplayer = GetComponent<rPlayer>();
     }
     
     void Update() 
@@ -22,13 +24,9 @@ public class BulletMove : MonoBehaviour
 
     public virtual void OnTriggerEnter2D(Collider2D other) 
     {
-        if(other.gameObject.CompareTag("Player"))
+        if(other.gameObject.CompareTag("Enemy"))
         {
-            other.GetComponent<Player>().OnDamaged(this.transform.position);
-        }
-        else if(other.gameObject.CompareTag("Enemy"))
-        {
-            other.GetComponent<Monster>().OnDamage(other.GetComponent<Player>().attackDamage);
+            other.GetComponent<Monster>().OnDamage(rplayer.attackDamage);
         }
         Destroy(this.gameObject);
     }

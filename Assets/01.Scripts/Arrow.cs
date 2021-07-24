@@ -2,26 +2,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Arrow : BulletMove
+public class Arrow : MonoBehaviour
 {
 
     Rigidbody2D rb;
 
-    public override void Start()
+    float speed = 12f;
+
+    public void Start()
     {
-        base.Start();
         rb = GetComponent<Rigidbody2D>();
 
-        rb.AddForce((dir * speed) , ForceMode2D.Impulse);
+        rb.AddForce(Vector2.right * speed, ForceMode2D.Impulse);
     }
 
-    void Update()
-    {
-        
-    }
+    
 
-    public override void OnTriggerEnter2D(Collider2D other)
+    public void OnTriggerEnter2D(Collider2D other)
     {
-        base.OnTriggerEnter2D(other);
+
     }
 }

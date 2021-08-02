@@ -47,7 +47,10 @@ public class Monster : MonoBehaviour, IDamageable
     
     public GameObject projectTile;
 
-    public Transform pos;
+    Transform pos;
+    public Transform rightAtkPos;
+    public Transform leftAtkPos;
+
     public Vector2 boxSize;
 
     Vector2 dir;
@@ -107,6 +110,7 @@ public class Monster : MonoBehaviour, IDamageable
         }
         else if(monsterType == MonsterType.meleeMonster)
         {
+            pos = dir.x > 0 ? rightAtkPos : leftAtkPos;
             Collider2D[] collider2Ds = Physics2D.OverlapBoxAll(pos.position, boxSize, 0);
             foreach(Collider2D collider in collider2Ds)
             {
@@ -184,7 +188,7 @@ public class Monster : MonoBehaviour, IDamageable
             isMove = false;
             Attack();
             break;
-        }
+        } 
     }
 
     void CheckStates()

@@ -32,13 +32,13 @@ public class UIManager : MonoBehaviour
 
     void Start() 
     {
-        CurLevel();
-        PlayerHp.value = player.hp;
+       PlayerHp.maxValue = player.hp;
     }
 
     void Update() 
     {
-        
+        CurLevel();
+        PlayerHp.value = player.hp;
     }
 
     void CurLevel()

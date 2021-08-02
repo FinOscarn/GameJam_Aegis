@@ -14,6 +14,8 @@ public class mDoppelganger : Player
     }
     States states = States.Chase;
 
+    public Vector2  dir;
+
     bool isMove = true;
 
     public override void Start() 
@@ -51,9 +53,10 @@ public class mDoppelganger : Player
     {
         Debug.DrawRay(transform.position, Vector2.up * 4f, Color.red);
         RaycastHit2D hitY = Physics2D.Raycast(transform.position, Vector2.up, 7f);
-        if(hitY)
+        if(hitY.collider != null)
         {
-            if(hitY.transform.CompareTag("Ground")&& isGround)
+            Debug.Log("왜 안댐");
+            if(hitY.transform.CompareTag("Ground") && isGround)
             {
                 rb.AddForce(Vector2.up*jumpSpeed, ForceMode2D.Impulse);
                 Debug.Log("Jump");
@@ -61,11 +64,12 @@ public class mDoppelganger : Player
             }
         }
 
-        Debug.DrawRay(transform.position, Vector2.right * 3f, Color.red);
-        RaycastHit2D hitX = Physics2D.Raycast(transform.position, Vector2.right, 3f);
-        if(hitX)
+        Debug.DrawRay(transform.position, dir * 3f, Color.red);
+        RaycastHit2D hitX = Physics2D.Raycast(transform.position, dir, 3f);
+        if(hitX.collider != null)
         {
-            if(hitX.transform.CompareTag("Ground")&& isGround)
+            Debug.Log("왜 안댐");
+            if(hitX.transform.CompareTag("Ground") && isGround)
             {
                 rb.AddForce(Vector2.up*jumpSpeed, ForceMode2D.Impulse);
                 Debug.Log("Jump");
@@ -91,6 +95,8 @@ public class mDoppelganger : Player
     public override void DoppelgangerMove()
     {
         base.DoppelgangerMove();
+        dir = realDir > 0 ? Vector2.right : Vector2.left;
+
 
         if(distance > 3000)
         {

@@ -32,7 +32,10 @@ public class Player : MonoBehaviour
 
     public float distance;
 
-    public Transform pos;
+    public Transform rightAtkPos;
+    public Transform leftAtkPos;
+    protected Transform pos;
+
     public Vector2 boxSize;
 
     public float realDir;
@@ -110,6 +113,7 @@ public class Player : MonoBehaviour
             rb.AddForce(Vector2.up*jumpSpeed, ForceMode2D.Impulse);
         }
 
+        pos = h > 0 ? rightAtkPos :  leftAtkPos;
         mouse = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         angle = Mathf.Atan2(target.y - transform.position.y, target.x - transform.position.x) * Mathf.Rad2Deg;
         Weapon.transform.rotation = Quaternion.AngleAxis(angle-90, Vector3.forward);
@@ -153,9 +157,11 @@ public class Player : MonoBehaviour
         distance = dir.sqrMagnitude;
         realDir = dir.x > 0 ? 1 : -1;
 
-        rb.velocity = new Vector2( realDir * speed ,rb.velocity.y);
+        sr.flipX = realDir > 0 ? false : true;
 
+        pos = dir.x > 0 ? rightAtkPos : leftAtkPos;
         
+        rb.velocity = new Vector2( realDir * speed ,rb.velocity.y);
     }
 
     public void CheckGround()
@@ -228,7 +234,7 @@ public class Player : MonoBehaviour
 
     void OffDamaged()
     {
-        gameObject.layer = 9;
+        gameObject.layer = 7;
         sr.color = new Color(1, 1, 1, 1);
     }
 
@@ -238,6 +244,13 @@ public class Player : MonoBehaviour
         {
             GetComponent<BoxCollider2D>().isTrigger = false;
         }
+    }
+
+    private void OnDrawGizmos() 
+    {
+        Gizmos.DrawSphere((Vector2)transform.position + new Vector2(0, -0.8f),0.3f);
+        Gizmos.color = Color.blue;
+        Gizmos.DrawWireCube(pos.position, boxSize);
     }
     
     

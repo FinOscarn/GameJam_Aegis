@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
-    public rPlayer player;
+    public Player player;
 
     public Slider PlayerHp;
     public Slider DoppelHp;

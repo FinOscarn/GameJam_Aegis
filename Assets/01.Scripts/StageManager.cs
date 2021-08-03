@@ -58,7 +58,10 @@ public class StageManager : MonoBehaviour
 
     private void Update()
     {
-        DataManager.Instance.monsters = DataManager.Instance.monsters.OrderBy(x => Vector2.Distance(x.transform.position, Player.transform.position)).ToList();
+        if(DataManager.Instance.monsters.Count > 0)
+        {
+            DataManager.Instance.monsters = DataManager.Instance.monsters.OrderBy(x => Vector2.Distance(x.transform.position, Player.transform.position)).ToList();
+        }
     }
 
     public void NextStage()

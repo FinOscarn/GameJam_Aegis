@@ -132,6 +132,11 @@ public class Player : MonoBehaviour
                 if(collider.CompareTag("Enemy"))
                 {
                     collider.GetComponent<Monster>().OnDamage(attackDamage);
+                    if(collider.GetComponent<Monster>().hp < 0)
+                    {
+                        DataManager.Instance.PlayerEx++;
+                        LevelUpCheck();
+                    }
                 }
             }
 

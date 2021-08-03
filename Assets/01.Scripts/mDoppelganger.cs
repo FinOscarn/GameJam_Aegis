@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class mDoppelganger : Player
 {
+    public GameObject player; 
+    public float playerDis;
 
     public enum States
     {
@@ -27,7 +29,19 @@ public class mDoppelganger : Player
 
     public override void Update() 
     {
-        Monster = DataManager.Instance.monsters[0];
+        if(DataManager.Instance.monsters.Count > 0)
+        {
+            Monster = DataManager.Instance.monsters[0];
+        }
+        else
+        {
+            Vector2 dir = player.transform.position - transform.position;
+            int playerDir = dir.x > 0 ? 1 : -1;
+            if(Mathf.Abs(transform.position.x - player.transform.position.x) > distance)
+            {
+                rb.velocity = new Vector2(playerDir * speed ,rb.velocity.y);
+            }
+        }
         Hpbar();
     }
 
@@ -38,7 +52,6 @@ public class mDoppelganger : Player
 
     void Init()
     {
-        
         attackSpeed = 2f;
         attackRange = 6f;
         jumpSpeed = 5f;
@@ -53,7 +66,7 @@ public class mDoppelganger : Player
     {
         Debug.DrawRay(transform.position, Vector2.up * 4f, Color.red);
         RaycastHit2D hitY = Physics2D.Raycast(transform.position, Vector2.up, 7f);
-        if(hitY.collider != null)
+        if(hitY)
         {
             Debug.Log("왜 안댐");
             if(hitY.transform.CompareTag("Ground") && isGround)
@@ -66,7 +79,7 @@ public class mDoppelganger : Player
 
         Debug.DrawRay(transform.position, dir * 3f, Color.red);
         RaycastHit2D hitX = Physics2D.Raycast(transform.position, dir, 3f);
-        if(hitX.collider != null)
+        if(hitX)
         {
             Debug.Log("왜 안댐");
             if(hitX.transform.CompareTag("Ground") && isGround)
@@ -88,6 +101,11 @@ public class mDoppelganger : Player
             if(collider.CompareTag("Enemy"))
             {
                 collider.GetComponent<Monster>().OnDamage(attackDamage);
+                if(collider.GetComponent<Monster>().hp < 0)
+                {
+                    DataManager.Instance.DoppelEx++;
+                    LevelUpCheck();
+                }
             }
         }
     }

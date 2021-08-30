@@ -5,16 +5,12 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-
     public GameObject PlayerHpbar;
-    public GameObject DoppelHpbar;
 
     protected bool isGround = true;
 
     protected Rigidbody2D rb;
     protected StageManager stageManager;
-
-    public GameObject Monster;
 
     public GameObject Weapon;
 
@@ -39,6 +35,7 @@ public class Player : MonoBehaviour
     public Vector2 boxSize;
 
     public float realDir;
+    float savePos;
 
     public enum PlayerStates
     {
@@ -113,7 +110,11 @@ public class Player : MonoBehaviour
             rb.AddForce(Vector2.up*jumpSpeed, ForceMode2D.Impulse);
         }
 
-        pos = h > 0 ? rightAtkPos :  leftAtkPos;
+        
+        if (h != 0) savePos = h;
+
+
+        pos = savePos > 0 ? rightAtkPos :  leftAtkPos;
         mouse = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         angle = Mathf.Atan2(target.y - transform.position.y, target.x - transform.position.x) * Mathf.Rad2Deg;
         Weapon.transform.rotation = Quaternion.AngleAxis(angle-90, Vector3.forward);
@@ -149,25 +150,9 @@ public class Player : MonoBehaviour
         {
             DataManager.Instance.PlayerLv++;
         }
-        
-        if(DataManager.Instance.DoppelEx == 6)
-        {
-            DataManager.Instance.DoppelgangerLv++;
-        }
     }
 
-    public virtual void DoppelgangerMove()
-    {
-        Vector2 dir = Monster.transform.position - transform.position;
-        distance = dir.sqrMagnitude;
-        realDir = dir.x > 0 ? 1 : -1;
-
-        sr.flipX = realDir > 0 ? false : true;
-
-        pos = dir.x > 0 ? rightAtkPos : leftAtkPos;
-        
-        rb.velocity = new Vector2( realDir * speed ,rb.velocity.y);
-    }
+   
 
     public void CheckGround()
     {
@@ -243,20 +228,11 @@ public class Player : MonoBehaviour
         sr.color = new Color(1, 1, 1, 1);
     }
 
-    private void OnTriggerExit2D(Collider2D other) 
+    private void OnTriggerExit2D(Collider2D other)
     {
         if(other.transform.CompareTag("Ground") && !isGround)
         {
             GetComponent<BoxCollider2D>().isTrigger = false;
         }
     }
-
-    private void OnDrawGizmos() 
-    {
-        Gizmos.DrawSphere((Vector2)transform.position + new Vector2(0, -0.8f),0.3f);
-        Gizmos.color = Color.blue;
-        Gizmos.DrawWireCube(pos.position, boxSize);
-    }
-    
-    
 }

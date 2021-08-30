@@ -60,7 +60,8 @@ public class StageManager : MonoBehaviour
     {
         if(DataManager.Instance.monsters.Count > 0)
         {
-            DataManager.Instance.monsters = DataManager.Instance.monsters.OrderBy(x => Vector2.Distance(x.transform.position, Player.transform.position)).ToList();
+            DataManager.Instance.monsters = DataManager.Instance.monsters.
+                OrderBy(x => Vector2.Distance(x.transform.position, Player.transform.position)).ToList();
         }
     }
 

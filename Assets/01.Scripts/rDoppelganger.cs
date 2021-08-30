@@ -2,91 +2,51 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class rDoppelganger : Player
+public class rDoppelganger : Doppelganger
 {
-    public enum States
+    void Awake() 
     {
-        Chase,
-        Attack,
-        Jump
-    }
-    States states = States.Chase;
-
-    bool isMove = true;
-
-    public override void Start() 
-    {
-        base.Start();
-        Init();
+        InitStat();
     }
 
-    public override void Update() 
-    {
-        
-    }
-
-    private void FixedUpdate() 
-    {
-        CheckStates();
-    }
-
-    void Init()
+    void InitStat()
     {
         attackSpeed = 2f;
         attackRange = 6f;
         jumpSpeed = 5f;
     }
 
-    void CheckPlatform()
+    public override void Attack()
     {
-        Debug.DrawRay(transform.position, Vector2.up * 100f, Color.red);
-        Debug.Log("SAdasd");
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.up, 100f);
-        if(hit)
+        isMove = false;
+        Debug.Log("Attack");
+        Collider2D[] collider2Ds = Physics2D.OverlapBoxAll(pos.position, boxSize, 0);
+        foreach(Collider2D collider in collider2Ds)
         {
-            if(hit.transform.CompareTag("Ground")&& isGround)
+            Debug.Log(collider.tag);
+            if(collider.CompareTag("Enemy"))
             {
-                rb.AddForce(Vector2.up*jumpSpeed, ForceMode2D.Impulse);
-                Debug.Log("Jump");
-                isMove = false;
+                collider.GetComponent<Monster>().OnDamage(attackDamage);
+                if(collider.GetComponent<Monster>().hp < 0)
+                {
+                    DataManager.Instance.DoppelEx++;
+                    LevelUpCheck();
+                }
             }
         }
     }
 
-    void Attack()
+    public override void CheckStates()
     {
-        Debug.Log("Attack");
-    }
-
-    void StartStates(States _states)
-    {
-        states = _states;
-        switch(states)
+        switch(doppleStates)
         {
-            case States.Chase:
-            isMove = true;
-            DoppelgangerMove();
-            CheckPlatform();
-            break;
-            case States.Attack:
-            isMove = false;
-            attackSpeed = Time.time + 1f; 
-            Attack();
-            break;
-        }
-    }
-
-    void CheckStates()
-    {
-        switch(states)
-        {
-            case States.Chase:
-                if(distance > attackRange * attackRange) StartStates(States.Chase);
-                if(distance < (attackRange * attackRange)) StartStates(States.Attack);
+            case DoppleStates.Chase:
+                if(distance > attackRange * attackRange) StartStates(DoppleStates.Chase);
+                if(distance < (attackRange * attackRange)) StartStates(DoppleStates.Attack);
                 Debug.Log("Chase");
             break;
-            case States.Attack:
-                if(Time.time > 0.5f) StartStates(States.Chase);
+            case DoppleStates.Attack:
+                if(Time.time > 0.5f) StartStates(DoppleStates.Chase);
                 Debug.Log("attack");
             break;
         }

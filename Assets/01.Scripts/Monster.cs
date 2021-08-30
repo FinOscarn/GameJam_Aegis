@@ -232,16 +232,9 @@ public class Monster : MonoBehaviour, IDamageable
             });
         }
     }
-
     private void OnTriggerEnter2D(Collider2D other) 
     {
        
         
     } 
-
-    void OnDrawGizmos() 
-    {
-        Gizmos.color = Color.blue;
-        Gizmos.DrawWireCube(pos.position, boxSize);
-    }
 }

@@ -26,7 +26,7 @@ public class BulletMove : MonoBehaviour
     {
         if(other.gameObject.CompareTag("Enemy"))
         {
-            other.GetComponent<Monster>().OnDamage(rplayer.attackDamage);
+            other.GetComponent<LivingEntity>().OnDamage(rplayer.attackDamage);
         }
         Destroy(this.gameObject);
     }

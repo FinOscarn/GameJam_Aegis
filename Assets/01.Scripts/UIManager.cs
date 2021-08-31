@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
-    public Player player;
+    public LivingEntity livingEntity;
 
     public Slider PlayerHp;
     public Slider DoppelHp;
@@ -28,17 +28,18 @@ public class UIManager : MonoBehaviour
             GameObject.Find("DoppelFill").gameObject.SetActive(false);
         else
             GameObject.Find("DoppelFill").gameObject.SetActive(true);
+
     }
 
     void Start() 
     {
-       PlayerHp.maxValue = player.hp;
+       PlayerHp.maxValue = livingEntity.hp;
     }
 
     void Update() 
     {
         CurLevel();
-        PlayerHp.value = player.hp;
+        PlayerHp.value = livingEntity.hp;
     }
 
     void CurLevel()

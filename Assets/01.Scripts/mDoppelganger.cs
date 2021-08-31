@@ -14,6 +14,7 @@ public class mDoppelganger : Doppelganger
         attackSpeed = 2f;
         attackRange = 2f;
         jumpSpeed = 5f;
+        attackDamage = 2f;
     }
 
     public override void Attack()
@@ -24,15 +25,19 @@ public class mDoppelganger : Doppelganger
         foreach(Collider2D collider in collider2Ds)
         {
             Debug.Log(collider.tag);
-            if(collider.CompareTag("Enemy"))
+
+            if (collider.CompareTag("Enemy"))
             {
-                collider.GetComponent<Monster>().OnDamage(attackDamage);
-                if(collider.GetComponent<Monster>().hp < 0)
+                collider.GetComponent<Monster>().Damaged();
+                collider.GetComponent<LivingEntity>().OnDamage(attackDamage);
+                if (collider.GetComponent<LivingEntity>().hp <= 0)
                 {
                     DataManager.Instance.DoppelEx++;
                     LevelUpCheck();
                 }
             }
+
+         
         }
     }
 }

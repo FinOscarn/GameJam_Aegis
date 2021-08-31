@@ -26,8 +26,8 @@ public class rDoppelganger : Doppelganger
             Debug.Log(collider.tag);
             if(collider.CompareTag("Enemy"))
             {
-                collider.GetComponent<Monster>().OnDamage(attackDamage);
-                if(collider.GetComponent<Monster>().hp < 0)
+                collider.GetComponent<LivingEntity>().OnDamage(attackDamage);
+                if(collider.GetComponent<LivingEntity>().hp < 0)
                 {
                     DataManager.Instance.DoppelEx++;
                     LevelUpCheck();

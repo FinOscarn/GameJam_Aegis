@@ -18,7 +18,6 @@ public class Player : MonoBehaviour
     public SpriteRenderer sr;
 
     [Header("플레이어 스텟")]
-    public float hp;
     public float attackDamage;
     public float defensePower;
     public float attackSpeed;
@@ -132,8 +131,9 @@ public class Player : MonoBehaviour
                 Debug.Log(collider.tag);
                 if(collider.CompareTag("Enemy"))
                 {
-                    collider.GetComponent<Monster>().OnDamage(attackDamage);
-                    if(collider.GetComponent<Monster>().hp < 0)
+                    collider.GetComponent<LivingEntity>().OnDamage(attackDamage);
+                    collider.GetComponent<Monster>().Damaged();
+                    if (collider.GetComponent<LivingEntity>().hp < 0)
                     {
                         DataManager.Instance.PlayerEx++;
                         LevelUpCheck();
@@ -178,13 +178,6 @@ public class Player : MonoBehaviour
         }
     }
 
-    public void Die()
-    {
-        if(hp <= 0)
-        {
-            states = PlayerStates.die;
-        }
-    }
 
     private void OnTriggerStay2D(Collider2D other) 
     {
@@ -210,7 +203,6 @@ public class Player : MonoBehaviour
 
     public void OnDamaged(Vector2 targetPos)
     {
-        hp--;
         gameObject.layer = 10;
 
         sr.color = new Color(1,1,1,0.4f);

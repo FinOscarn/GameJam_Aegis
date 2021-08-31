@@ -112,7 +112,7 @@ public class Doppelganger : MonoBehaviour
         if(isCheckAtk)
         {
             Monster = player;
-            //TODO : 플레이어랑 도플갱어 충돌체크 on off 해주기, 플레이어가 죽는다면 마지막 체크포인트로 이동 UI 띄워주기. 저장도 만들기
+
             
         }
     }
@@ -136,7 +136,6 @@ public class Doppelganger : MonoBehaviour
         RaycastHit2D hitX = Physics2D.Raycast(transform.position, Vector2.right, 1f);
         if(hitX)
         {
-            Debug.LogError("DKDKDK");
             if(hitX.transform.CompareTag("Ground") && isGround)
             {   
                 rb.AddForce(Vector2.up*jumpSpeed, ForceMode2D.Impulse);
@@ -165,8 +164,8 @@ public class Doppelganger : MonoBehaviour
             Debug.Log(collider.tag);
             if(collider.CompareTag("Enemy"))
             {
-                collider.GetComponent<Monster>().OnDamage(attackDamage);
-                if(collider.GetComponent<Monster>().hp < 0)
+                collider.GetComponent<Monster>().Damaged();
+                if(collider.GetComponent<LivingEntity>().hp < 0)
                 {
                     DataManager.Instance.DoppelEx++;
                     LevelUpCheck();
@@ -274,6 +273,4 @@ public class Doppelganger : MonoBehaviour
                 break;
         }
     }
-
-    
 }

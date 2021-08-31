@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 
-public class Monster : MonoBehaviour, IDamageable
+public class Monster : MonoBehaviour
 {
     public enum MonsterType
     {
@@ -33,7 +33,6 @@ public class Monster : MonoBehaviour, IDamageable
     public Player player;
 
     [Header("스텟")]
-    public float hp;
     public float attackDamage;
     public float attackSpeed;
     public float moveSpeed;
@@ -72,12 +71,15 @@ public class Monster : MonoBehaviour, IDamageable
 
     float timer = 0f;
 
+    public LivingEntity entity;
+
     private void Awake() 
     {
         sprite = GetComponent<SpriteRenderer>();
         sr = GetComponent<SpriteRenderer>();
         animator = GetComponent<Animator>();
         player = FindObjectOfType<Player>();
+        entity = GetComponent<LivingEntity>();
         PlayerObj = player.gameObject;
         rb = GetComponent<Rigidbody2D>();
         StartStates(States.Patrolling);
@@ -117,7 +119,7 @@ public class Monster : MonoBehaviour, IDamageable
                 Debug.Log(collider.tag);
                 if(collider.CompareTag("Player"))
                 {
-                    collider.GetComponent<Player>().hp--;
+                    collider.GetComponent<LivingEntity>().OnDamage(attackDamage);
                     collider.GetComponent<Player>().OnDamaged(transform.position);
                 }
             }
@@ -209,18 +211,13 @@ public class Monster : MonoBehaviour, IDamageable
         }
     }
 
-    public void OnDamage(float playDamage)
+    public void Damaged()
     {
-        
-        hp -= playDamage;
-
-        Debug.Log("몬스터가 데미지 입음");
-
         sr.DOColor(Color.black,0.1f).OnComplete(() => {
             sr.DOColor(Color.white, 0.5f);
         });
 
-        if(hp < 0)
+        if(entity.hp < 0)
         {
             DataManager.Instance.deadMonsterCount++;
 

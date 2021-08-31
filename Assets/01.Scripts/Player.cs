@@ -36,6 +36,8 @@ public class Player : MonoBehaviour
     public float realDir;
     float savePos;
 
+    public float h;
+
     public enum PlayerStates
     {
         idle,
@@ -73,6 +75,9 @@ public class Player : MonoBehaviour
         Attack();
         SetAnim();
         Hpbar();
+        PlayerJump();
+        WeaponRotate();
+        PlayerMoveInput();
     }
 
     void Hpbar()
@@ -80,9 +85,29 @@ public class Player : MonoBehaviour
         PlayerHpbar.transform.position = Camera.main.WorldToScreenPoint(transform.position + new Vector3(0, 1.2f ,0));
     }
 
+    void PlayerJump()
+    {
+        if (Input.GetButtonDown("Jump") && isGround)
+        {
+            rb.velocity = new Vector2(rb.velocity.x, 0);
+            rb.AddForce(Vector2.up * jumpSpeed, ForceMode2D.Impulse);
+        }
+    }
+
+    void WeaponRotate()
+    {
+        mouse = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        angle = Mathf.Atan2(target.y - transform.position.y, target.x - transform.position.x) * Mathf.Rad2Deg;
+        Weapon.transform.rotation = Quaternion.AngleAxis(angle - 90, Vector3.forward);
+    }
+
+    void PlayerMoveInput()
+    {
+        h = Input.GetAxisRaw("Horizontal");
+    }
+    
     public void PlayerMove()
     {
-        float h = Input.GetAxisRaw("Horizontal");
         
         rb.velocity = new Vector2( h* speed ,rb.velocity.y);
 
@@ -103,20 +128,11 @@ public class Player : MonoBehaviour
         {
             sr.flipX = false;
         }
-
-        if(Input.GetButtonDown("Jump") && isGround)
-        {
-            rb.AddForce(Vector2.up*jumpSpeed, ForceMode2D.Impulse);
-        }
-
         
         if (h != 0) savePos = h;
 
-
         pos = savePos > 0 ? rightAtkPos :  leftAtkPos;
-        mouse = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        angle = Mathf.Atan2(target.y - transform.position.y, target.x - transform.position.x) * Mathf.Rad2Deg;
-        Weapon.transform.rotation = Quaternion.AngleAxis(angle-90, Vector3.forward);
+        
     }
 
     public virtual void Attack()
@@ -156,7 +172,7 @@ public class Player : MonoBehaviour
 
     public void CheckGround()
     {
-        isGround = Physics2D.OverlapCircle((Vector2)transform.position + new Vector2(0, -0.8f), 0.3f, 1 << LayerMask.NameToLayer("Ground"));
+        isGround = Physics2D.OverlapCircle((Vector2)transform.position + new Vector2(0, -0.9f), 0.3f, 1 << LayerMask.NameToLayer("Ground"));
     }
 
     public void SetAnim()
@@ -227,4 +243,11 @@ public class Player : MonoBehaviour
             GetComponent<BoxCollider2D>().isTrigger = false;
         }
     }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawSphere((Vector2)transform.position + new Vector2(0, -0.9f), 0.3f);
+    }
 }
+
+

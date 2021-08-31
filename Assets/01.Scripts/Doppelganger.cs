@@ -104,7 +104,7 @@ public class Doppelganger : MonoBehaviour
 
     void CheckGround()
     {
-        isGround = Physics2D.OverlapCircle((Vector2)transform.position + new Vector2(0, -0.8f), 0.3f, 1 << LayerMask.NameToLayer("Ground"));
+        isGround = Physics2D.OverlapCircle((Vector2)transform.position + new Vector2(-0.4f, -0.8f), 0.3f, 1 << LayerMask.NameToLayer("Ground"));
     }
 
     void PlayerAtk()
@@ -132,16 +132,17 @@ public class Doppelganger : MonoBehaviour
             }
         }
 
-        Debug.DrawRay(transform.position, Vector2.right * 1f, Color.red);
-        RaycastHit2D hitX = Physics2D.Raycast(transform.position, Vector2.right, 1f);
+        Debug.DrawRay(transform.position + new Vector3(0.4f,0f), Vector2.right * 1f, Color.red);
+        RaycastHit2D hitX = Physics2D.Raycast(transform.position + new Vector3(0.4f, 0f), Vector2.right, 1f);
         if(hitX)
         {
-            if(hitX.transform.CompareTag("Ground") && isGround)
-            {   
-                rb.AddForce(Vector2.up*jumpSpeed, ForceMode2D.Impulse);
+            if(hitX.collider.gameObject.CompareTag("Ground"))
+            {
+                rb.AddForce(Vector2.up * jumpSpeed, ForceMode2D.Impulse);
                 Debug.Log("Jump");
             }
-        }
+            
+        }   
     }
 
     public void LevelUpCheck()
@@ -272,5 +273,11 @@ public class Doppelganger : MonoBehaviour
                 if(Time.time > 0.5f && Time.time > attackSpeed) StartStates(DoppleStates.Attack); Debug.Log("어택으로 돌아갑니다");
                 break;
         }
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawSphere((Vector2)transform.position + new Vector2(-0.4f, -0.8f), 0.3f);
+            
     }
 }

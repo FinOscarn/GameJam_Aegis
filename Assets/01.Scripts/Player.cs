@@ -144,7 +144,6 @@ public class Player : MonoBehaviour
             Collider2D[] collider2Ds = Physics2D.OverlapBoxAll(pos.position, boxSize, 0);
             foreach(Collider2D collider in collider2Ds)
             {
-                Debug.Log(collider.tag);
                 if(collider.CompareTag("Enemy"))
                 {
                     collider.GetComponent<LivingEntity>().OnDamage(attackDamage);
@@ -201,7 +200,6 @@ public class Player : MonoBehaviour
         {
             if(Input.GetKeyDown(KeyCode.S))
             {
-                Debug.Log("포탈포탈");
                 stageManager.NextStage();
             }
         }

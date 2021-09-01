@@ -48,7 +48,11 @@ public class Doppelganger : MonoBehaviour
     Vector2 MonsterDir;
 
     //플레이어를 공격하는 조건
-    bool isCheckAtk;
+    bool isCheckAtk = false;
+    //몬스터가 존재하는지
+    bool isLiveMonster = true;
+
+    int layerMask = 1 << 6;
 
 
     public enum DoppleStates
@@ -89,7 +93,8 @@ public class Doppelganger : MonoBehaviour
         MonsterDistance();
         CheckGround();
         JumpPlatform();
-        //Debug.Log(doppleStates);
+        PlayerAtk();
+        PlayerChase();  
     }
 
     void Hpbar()
@@ -109,39 +114,37 @@ public class Doppelganger : MonoBehaviour
 
     void PlayerAtk()
     {
-        if(isCheckAtk)
+        if (isCheckAtk)
         {
             Monster = player;
-
-            
         }
     }
 
+    void PlayerChase()
+    {
+        if (DataManager.Instance.monsters == null)
+        {
+            Vector2 dir = transform.position - player.transform.position;
+            float dist = dir.sqrMagnitude;
+            if(dist > 20)
+            {
+                float direction = transform.position.x - player.transform.position.x > 0 ? 1 : -1;
+                sr.flipX = direction > 0 ? false : true;
+                rb.velocity = new Vector2(direction * speed, rb.velocity.y);
+            }
+        }
+    }
 
     void JumpPlatform()
     {
-        Debug.DrawRay(transform.position, Vector2.up * 2f, Color.red);
-        RaycastHit2D hitY = Physics2D.Raycast(transform.position, Vector2.up, 2f);
-        if(hitY)
-        {
-            if(hitY.transform.CompareTag("celling") && isGround)
-            {
-                rb.AddForce(Vector2.up*jumpSpeed, ForceMode2D.Impulse);
-                Debug.Log("Jump");
-                isMove = false;
-            }
-        }
-
-        Debug.DrawRay(transform.position + new Vector3(0.4f,0f), Vector2.right * 1f, Color.red);
-        RaycastHit2D hitX = Physics2D.Raycast(transform.position + new Vector3(0.4f, 0f), Vector2.right, 1f);
+        Debug.DrawRay(transform.position , Vector2.right * 1f, Color.red);
+        RaycastHit2D hitX = Physics2D.Raycast(transform.position , Vector2.right, 1f, layerMask);
         if(hitX)
         {
-            if(hitX.collider.gameObject.CompareTag("Ground"))
-            {
-                rb.AddForce(Vector2.up * jumpSpeed, ForceMode2D.Impulse);
-                Debug.Log("Jump");
-            }
-            
+            Debug.Log(hitX.collider.gameObject);
+
+            rb.AddForce(Vector2.up * jumpSpeed, ForceMode2D.Impulse);
+            Debug.Log("Jump");
         }   
     }
 
@@ -185,40 +188,18 @@ public class Doppelganger : MonoBehaviour
     {
         if (isMove)
         {
-            CheckEnemy();
-            Debug.LogWarning(monsterChase);
-            if(monsterChase)
-            {
-                
-                monDir = Monster.transform.position.x - transform.position.x > 0 ? 1 : -1;
-                sr.flipX = monDir > 0 ? false : true;
-                pos = dir.x > 0 ? rightAtkPos : leftAtkPos;
+            monDir = Monster.transform.position.x - transform.position.x > 0 ? 1 : -1;
+            sr.flipX = monDir > 0 ? false : true;
+            pos = dir.x > 0 ? rightAtkPos : leftAtkPos;
             
-                rb.velocity = new Vector2(monDir * speed ,rb.velocity.y);
+            rb.velocity = new Vector2(monDir * speed ,rb.velocity.y);
 
-                Debug.Log(monDir);
-            }
-            else
-            {
-                dir = monDir > 0 ? Vector2.right : Vector2.left;
-
-                if(distance > 3000)
-                {
-                    transform.position = Monster.transform.position;
-                }
-            }
+            Debug.Log(monDir);
+            dir = monDir > 0 ? Vector2.right : Vector2.left;
         }
     }
 
-    public void CheckEnemy()
-    {
-        Vector2 enemyDir = Monster.transform.position - transform.position;
-        float enemyDis = enemyDir.sqrMagnitude;
-
-        if (enemyDis < 3000) monsterChase = true;
-        else monsterChase = false;
-    }
-
+    
     void Teleport()
     {
         int curTr = Mathf.RoundToInt(transform.position.x);

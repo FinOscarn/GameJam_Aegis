@@ -25,12 +25,13 @@ public class StageManager : MonoBehaviour
 
     public List<SpriteRenderer> spriteRenderers = new List<SpriteRenderer>();
 
+    public List<Collider2D> bgColider = new List<Collider2D>();
+
     public GameObject[] monsterPosition;
 
     int curStage;
     int lastStage;
 
-    public Collider2D[] bgColider;
     private void Start() 
     {
         cine = FindObjectOfType<CinemachineConfiner>();
@@ -72,12 +73,16 @@ public class StageManager : MonoBehaviour
         int mapIndex = curStage / 10;
         int randomIndex = Random.Range(0, startPositionArrays[mapIndex].StartPosition.Count);
 
-        cine.m_BoundingShape2D = bgColider[randomIndex];
-
         produceMonster(randomIndex);
 
         Player.transform.position = startPositionArrays[mapIndex].StartPosition[randomIndex].position;
         startPositionArrays[mapIndex].StartPosition.RemoveAt(randomIndex);
+
+        cine.m_BoundingShape2D = bgColider[randomIndex];
+        bgColider.RemoveAt(randomIndex);
+
+        Debug.LogError(mapIndex);
+        Debug.LogError(randomIndex);
     }
 
     public void CurPotalSprite()

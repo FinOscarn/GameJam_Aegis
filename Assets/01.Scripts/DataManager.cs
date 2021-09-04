@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.SceneManagement;
 public class DataManager : MonoBehaviour
 {
     
@@ -50,4 +50,9 @@ public class DataManager : MonoBehaviour
     public int deadMonsterCount= 0;
 
     public int curStage;
+
+    public void Loading()
+    {
+
+    }
 }

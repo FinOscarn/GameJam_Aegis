@@ -11,7 +11,6 @@ public class Portal : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.R))
         {
-            Debug.Log("SDASDSD");
             stageManager.NextStage();
         }
     }

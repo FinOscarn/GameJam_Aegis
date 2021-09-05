@@ -8,7 +8,10 @@ using DG.Tweening;
 public class Title : MonoBehaviour
 {
     public Text TitleTxt;
-    
+
+    public Image rImage;
+    public Image lImage;
+
     void Start()
     {
         TitleText();
@@ -19,6 +22,15 @@ public class Title : MonoBehaviour
         
     }
 
+    public void SelectPlayer()
+    {
+        rImage.rectTransform.DOMoveX(480f, 1f);
+        lImage.rectTransform.DOMoveX(-480f, 1f).OnComplete(()=>
+        {
+            TabPanel();
+        });
+    }
+
     void TitleText()
     {
         TitleTxt.DOFade(0, 0.6f).SetEase(Ease.Linear).SetLoops(-1, LoopType.Yoyo);
@@ -26,6 +38,6 @@ public class Title : MonoBehaviour
 
     void TabPanel()
     {
-        SceneManager.LoadScene("LoadingScene");
+        SceneManager.LoadScene("InGame");
     }
 }

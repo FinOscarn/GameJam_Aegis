@@ -35,6 +35,14 @@ public class DataManager : MonoBehaviour
         {
             Destroy(this.gameObject);
         }
+
+    }
+
+
+    private void Start() 
+    {
+        SceneManager.LoadScene("LoadingScene", LoadSceneMode.Additive);
+        Debug.LogError("이거 되나요");
     }
 
     public List<GameObject> monsters = new List<GameObject>();
@@ -51,8 +59,7 @@ public class DataManager : MonoBehaviour
 
     public int curStage;
 
-    public void Loading()
-    {
+    
 
-    }
+    
 }

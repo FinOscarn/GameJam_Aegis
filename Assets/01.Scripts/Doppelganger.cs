@@ -122,14 +122,15 @@ public class Doppelganger : MonoBehaviour
 
     void PlayerChase()
     {
-        if (DataManager.Instance.monsters == null)
+        if (DataManager.Instance.monsters.Count == 0)
         {
+            Debug.LogError("ASDASDASD");
             Vector2 dir = transform.position - player.transform.position;
             float dist = dir.sqrMagnitude;
-            if(dist > 20)
+            float direction = transform.position.x - player.transform.position.x > 0 ? 1 : -1;
+            sr.flipX = direction > 0 ? false : true;
+            if (dist > 10)
             {
-                float direction = transform.position.x - player.transform.position.x > 0 ? 1 : -1;
-                sr.flipX = direction > 0 ? false : true;
                 rb.velocity = new Vector2(direction * speed, rb.velocity.y);
             }
         }

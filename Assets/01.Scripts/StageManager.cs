@@ -31,6 +31,8 @@ public class StageManager : MonoBehaviour
 
     int curStage;
     int lastStage;
+    
+    GameObject MonsterType;
 
     private void Start() 
     {
@@ -38,16 +40,9 @@ public class StageManager : MonoBehaviour
 
         int randomIndex = Random.Range(0, 2);
 
-        GameObject MonsterType = Instantiate(monsterPosition[randomIndex], startPositionArrays[0].StartPosition[0].transform);
+        MonsterType = Instantiate(monsterPosition[randomIndex], startPositionArrays[0].StartPosition[0].transform);
 
-        int count =  MonsterType.transform.childCount;
-
-        for(int i = 0; i < count; i++)
-        {
-            GameObject monster = MonsterType.transform.GetChild(i).gameObject;
-
-            DataManager.Instance.monsters.Add(monster);
-        }
+        
 
         int srCount  = Potal.Count;
 
@@ -81,8 +76,14 @@ public class StageManager : MonoBehaviour
         cine.m_BoundingShape2D = bgColider[randomIndex];
         bgColider.RemoveAt(randomIndex);
 
-        Debug.LogError(mapIndex);
-        Debug.LogError(randomIndex);
+        int count = MonsterType.transform.childCount;
+
+        for (int i = 0; i < count; i++)
+        {
+            GameObject monster = MonsterType.transform.GetChild(i).gameObject;
+
+            DataManager.Instance.monsters.Add(monster);
+        }
     }
 
     public void CurPotalSprite()

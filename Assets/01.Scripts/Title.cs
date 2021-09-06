@@ -12,14 +12,12 @@ public class Title : MonoBehaviour
     public Image rImage;
     public Image lImage;
 
+    public GameObject titlePanel;
+    public GameObject selectPanel;
+
     void Start()
     {
         TitleText();
-    }
-
-    void Update()
-    {
-        
     }
 
     public void SelectPlayer()
@@ -27,7 +25,7 @@ public class Title : MonoBehaviour
         rImage.rectTransform.DOMoveX(480f, 1f);
         lImage.rectTransform.DOMoveX(-480f, 1f).OnComplete(()=>
         {
-            TabPanel();
+            Loading();
         });
     }
 
@@ -36,8 +34,14 @@ public class Title : MonoBehaviour
         TitleTxt.DOFade(0, 0.6f).SetEase(Ease.Linear).SetLoops(-1, LoopType.Yoyo);
     }
 
-    void TabPanel()
+    void Loading()
     {
         SceneManager.LoadScene("InGame");
+    }
+
+    public void TabPanel()
+    {
+        titlePanel.SetActive(false);
+        selectPanel.SetActive(true);
     }
 }

@@ -10,12 +10,6 @@ public class LivingEntity : MonoBehaviour , IDamageable
     public void OnDamage(float damage)
     {
         hp -= damage;
-
-        //if(hp <= 0)
-        //{
-
-
-        //}
     }
 
 }

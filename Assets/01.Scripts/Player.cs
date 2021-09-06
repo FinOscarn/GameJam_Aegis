@@ -2,12 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using DG.Tweening;
 
 public class Player : MonoBehaviour
 {
     public GameObject PlayerHpbar;
 
     protected bool isGround = true;
+    private bool isDie = false;
 
     protected Rigidbody2D rb;
     protected StageManager stageManager;
@@ -38,6 +40,10 @@ public class Player : MonoBehaviour
 
     public float h;
 
+    public CanvasGroup canvasGroup;
+
+    LivingEntity livingEntity;
+
     public enum PlayerStates
     {
         idle,
@@ -58,6 +64,7 @@ public class Player : MonoBehaviour
         stageManager = FindObjectOfType<StageManager>();
         animator = GetComponent<Animator>();
         sr = GetComponent<SpriteRenderer>();
+        livingEntity = GetComponent<LivingEntity>();
 
         PlayerHpbar = GameObject.Find("Canvas/Player");
 
@@ -78,6 +85,7 @@ public class Player : MonoBehaviour
         PlayerJump();
         WeaponRotate();
         PlayerMoveInput();
+        Die();
     }
 
     void Hpbar()
@@ -87,7 +95,7 @@ public class Player : MonoBehaviour
 
     void PlayerJump()
     {
-        if (Input.GetButtonDown("Jump") && isGround)
+        if (Input.GetButtonDown("Jump") && isGround && !isDie)
         {
             rb.velocity = new Vector2(rb.velocity.x, 0);
             rb.AddForce(Vector2.up * jumpSpeed, ForceMode2D.Impulse);
@@ -96,9 +104,12 @@ public class Player : MonoBehaviour
 
     void WeaponRotate()
     {
-        mouse = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        angle = Mathf.Atan2(target.y - transform.position.y, target.x - transform.position.x) * Mathf.Rad2Deg;
-        Weapon.transform.rotation = Quaternion.AngleAxis(angle - 90, Vector3.forward);
+        if(!isDie)
+        {
+            mouse = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
+            angle = Mathf.Atan2(mouse.y, mouse.x ) * Mathf.Rad2Deg;
+            Weapon.transform.rotation = Quaternion.Euler(0,0,angle);
+        }
     }
 
     void PlayerMoveInput()
@@ -108,36 +119,43 @@ public class Player : MonoBehaviour
     
     public void PlayerMove()
     {
-        
-        rb.velocity = new Vector2( h* speed ,rb.velocity.y);
+        if(!isDie)
+        {
+            rb.velocity = new Vector2( h* speed ,rb.velocity.y);
 
-        if(h != 0)
-        {
-            states = PlayerStates.walk;
-        }
-        else
-        {
-            states = PlayerStates.idle;
-        }
+            if(h != 0)
+            {
+                states = PlayerStates.walk;
+            }
+            else
+            {
+                states = PlayerStates.idle;
+            }
         
-        if(h < 0)
-        {
-            sr.flipX = true;
-        }
-        else if (h > 0)
-        {
-            sr.flipX = false;
-        }
+            if(h < 0)
+            {
+                sr.flipX = true;
+            }
+            else if (h > 0)
+            {
+                sr.flipX = false;
+            }
         
-        if (h != 0) savePos = h;
+            if (h != 0) savePos = h;
 
-        pos = savePos > 0 ? rightAtkPos :  leftAtkPos;
-        
+            pos = savePos > 0 ? rightAtkPos :  leftAtkPos;
+
+            if (savePos > 0)
+                Weapon.transform.position = rightAtkPos.position;
+            else
+                Weapon.transform.position = leftAtkPos.position;
+        }
     }
 
     public virtual void Attack()
     {
-        if(Input.GetMouseButtonDown(0))
+        
+        if(Input.GetMouseButtonDown(0) && !isDie)
         {
             states = PlayerStates.attack;
 
@@ -155,7 +173,6 @@ public class Player : MonoBehaviour
                     }
                 }
             }
-
         }
     }
 
@@ -176,34 +193,25 @@ public class Player : MonoBehaviour
 
     public void SetAnim()
     {
-        switch(states)
+        if(!isDie)
         {
-            case PlayerStates.idle:
-            animator.SetBool("isWalk" , false);
-            break;
-            case PlayerStates.walk:
-            animator.SetBool("isWalk", true);
-            break;
-            case PlayerStates.attack:
-            animator.SetTrigger("IsAttack");
-            break;
-            case PlayerStates.die:
-            animator.SetTrigger("isDie");
-            break;
+            switch(states)
+            {
+                case PlayerStates.idle:
+                animator.SetBool("isWalk" , false);
+                break;
+                case PlayerStates.walk:
+                animator.SetBool("isWalk", true);
+                break;
+                case PlayerStates.attack:
+                animator.SetTrigger("IsAttack");
+                break;
+            }
         }
     }
 
-
     private void OnTriggerStay2D(Collider2D other) 
     {
-        if(other.transform.CompareTag("Potal"))
-        {
-            if(Input.GetKeyDown(KeyCode.S))
-            {
-                stageManager.NextStage();
-            }
-        }
-        
         if(other.transform.CompareTag("Ground")&& !isGround)
         {
             GetComponent<BoxCollider2D>().isTrigger = true;
@@ -224,7 +232,9 @@ public class Player : MonoBehaviour
         int dirc = transform.position.x - targetPos.x > 0 ? 1 : -1;
 
         rb.AddForce(new Vector2(dirc, 0)*3f, ForceMode2D.Impulse);
+
         
+
         Invoke("OffDamaged", 1f);
     }
 
@@ -232,6 +242,24 @@ public class Player : MonoBehaviour
     {
         gameObject.layer = 7;
         sr.color = new Color(1, 1, 1, 1);
+    }
+
+    void Die()
+    {
+        if (livingEntity.hp < 0 && !isDie)
+        {
+            animator.SetTrigger("isDie");
+            Debug.LogWarning("asdasd");
+            isDie = true;
+            
+            
+        }
+
+        if(livingEntity.hp < 0)
+        {
+            rb.velocity = new Vector2(0, 0);
+            canvasGroup.DOFade(1f, 1f);
+        }
     }
 
     private void OnTriggerExit2D(Collider2D other)

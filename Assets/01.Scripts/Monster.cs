@@ -72,6 +72,7 @@ public class Monster : MonoBehaviour
     float timer = 0f;
 
     public LivingEntity entity;
+    
 
     private void Awake() 
     {
@@ -83,6 +84,11 @@ public class Monster : MonoBehaviour
         PlayerObj = player.gameObject;
         rb = GetComponent<Rigidbody2D>();
         StartStates(States.Patrolling);
+    }
+
+    private void Start()
+    {
+        DataManager.Instance.monsters.Add(this.gameObject);
     }
 
     private void Update() 

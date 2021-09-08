@@ -38,7 +38,7 @@ public class StageManager : MonoBehaviour
     {
         cine = FindObjectOfType<CinemachineConfiner>();
 
-        int randomIndex = Random.Range(0, 2);
+        int randomIndex = Random.Range(0, 4);
 
         MonsterType = Instantiate(monsterPosition[randomIndex], startPositionArrays[0].StartPosition[0].transform);
 
@@ -100,7 +100,7 @@ public class StageManager : MonoBehaviour
 
     void produceMonster(int index)
     {
-        int random = Random.Range(0,2);
+        int random = Random.Range(0, 4);
 
         Instantiate(monsterPosition[random], startPositionArrays[0].StartPosition[index].transform);
     }

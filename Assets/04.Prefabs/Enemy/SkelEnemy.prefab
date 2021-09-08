@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 1916193519369395470}
   - component: {fileID: 1916193519369395471}
   - component: {fileID: -2657315334459998530}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: SkelEnemy
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -103,7 +103,6 @@ MonoBehaviour:
   states: 0
   PlayerObj: {fileID: 0}
   player: {fileID: 0}
-  hp: 7
   attackDamage: 1
   attackSpeed: 0.5
   moveSpeed: 3
@@ -115,6 +114,7 @@ MonoBehaviour:
   leftAtkPos: {fileID: 0}
   boxSize: {x: 0, y: 0}
   distance: 0
+  entity: {fileID: 0}
 --- !u!61 &1916193519369395473
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -193,4 +193,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4fab65f4dbf73a5458ede75a68d37d32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hp: 4
+  hp: 2

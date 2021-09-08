@@ -16,7 +16,7 @@ public class UIManager : MonoBehaviour
     public GameObject OptionPanel;
     public GameObject OptionImage;
 
-
+    public GameObject gameOverPanel;
     private void Awake() 
     {
         if (PlayerHp.value <= 0)
@@ -28,7 +28,6 @@ public class UIManager : MonoBehaviour
             GameObject.Find("DoppelFill").gameObject.SetActive(false);
         else
             GameObject.Find("DoppelFill").gameObject.SetActive(true);
-
     }
 
     void Start() 
@@ -40,6 +39,7 @@ public class UIManager : MonoBehaviour
     {
         CurLevel();
         PlayerHp.value = livingEntity.hp;
+        GameOverPanel();
     }
 
     void CurLevel()
@@ -52,5 +52,23 @@ public class UIManager : MonoBehaviour
     {
         OptionPanel.SetActive(true);
         OptionImage.SetActive(true);
+    }
+
+    void GameOverPanel()
+    {
+        if (Input.GetKey(KeyCode.Escape))
+        {
+            gameOverPanel.SetActive(true);
+        }
+    }
+
+    public void ExitGame()
+    {
+        Application.Quit();
+    }
+
+    public void Cancel()
+    {
+        gameOverPanel.SetActive(false);
     }
 }

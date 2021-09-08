@@ -7,6 +7,8 @@ using DG.Tweening;
 public class Player : MonoBehaviour
 {
     public GameObject PlayerHpbar;
+    public GameObject interactionPanel;
+
 
     protected bool isGround = true;
     private bool isDie = false;
@@ -18,6 +20,8 @@ public class Player : MonoBehaviour
 
     public Animator animator;
     public SpriteRenderer sr;
+
+    public GameObject black;
 
     [Header("플레이어 스텟")]
     public float attackDamage;
@@ -43,6 +47,7 @@ public class Player : MonoBehaviour
     public CanvasGroup canvasGroup;
 
     LivingEntity livingEntity;
+    
 
     public enum PlayerStates
     {
@@ -67,7 +72,6 @@ public class Player : MonoBehaviour
         livingEntity = GetComponent<LivingEntity>();
 
         PlayerHpbar = GameObject.Find("Canvas/Player");
-
         isGround = true;
     }
 
@@ -91,6 +95,7 @@ public class Player : MonoBehaviour
     void Hpbar()
     {
         PlayerHpbar.transform.position = Camera.main.WorldToScreenPoint(transform.position + new Vector3(0, 1.2f ,0));
+        interactionPanel.transform.position = Camera.main.WorldToScreenPoint(transform.position + new Vector3(1f, 0, 0));
     }
 
     void PlayerJump()
@@ -212,7 +217,19 @@ public class Player : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D other) 
     {
-        if(other.transform.CompareTag("Ground")&& !isGround)
+        if(other.gameObject.CompareTag("Potal"))
+        {
+            interactionPanel.SetActive(true);
+
+            if (Input.GetKeyDown(KeyCode.R))
+            {
+                stageManager.NextStage();
+                Debug.LogWarning("다음 스테이지!!!!!");
+                black.transform.position = transform.position;
+                interactionPanel.SetActive(false);
+            }
+        }
+        if (other.transform.CompareTag("Ground")&& !isGround)
         {
             GetComponent<BoxCollider2D>().isTrigger = true;
         }
@@ -221,6 +238,12 @@ public class Player : MonoBehaviour
         {
             OnDamaged(other.transform.position);
         }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if(other.gameObject.CompareTag("Potal"))
+            interactionPanel.SetActive(false);
     }
 
     public void OnDamaged(Vector2 targetPos)

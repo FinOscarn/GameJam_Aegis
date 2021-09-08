@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 7862832640671868787}
   - component: {fileID: 7862832640671868784}
   - component: {fileID: 6761062354238474680}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: IceEnemy
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -103,7 +103,6 @@ MonoBehaviour:
   states: 0
   PlayerObj: {fileID: 0}
   player: {fileID: 0}
-  hp: 3
   attackDamage: 1
   attackSpeed: 2
   moveSpeed: 3
@@ -115,6 +114,7 @@ MonoBehaviour:
   leftAtkPos: {fileID: 0}
   boxSize: {x: 0, y: 0}
   distance: 0
+  entity: {fileID: 0}
 --- !u!95 &7862832640671868788
 Animator:
   serializedVersion: 3

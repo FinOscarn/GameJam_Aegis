@@ -14,9 +14,10 @@ GameObject:
   - component: {fileID: 1554274367248371935}
   - component: {fileID: 1554274367248371934}
   - component: {fileID: 1554274367248371933}
-  m_Layer: 0
+  - component: {fileID: -8618046672983419672}
+  m_Layer: 9
   m_Name: Devill
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -150,7 +151,6 @@ MonoBehaviour:
   states: 2
   PlayerObj: {fileID: 0}
   player: {fileID: 0}
-  hp: 5
   attackDamage: 1
   attackSpeed: 2
   moveSpeed: 2
@@ -158,9 +158,11 @@ MonoBehaviour:
   range: 5
   attackRange: 2
   projectTile: {fileID: 0}
-  pos: {fileID: 5853522598953672474}
+  rightAtkPos: {fileID: 0}
+  leftAtkPos: {fileID: 0}
   boxSize: {x: 1.25, y: 2}
   distance: 0
+  entity: {fileID: 0}
 --- !u!95 &1554274367248371933
 Animator:
   serializedVersion: 3
@@ -180,6 +182,19 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &-8618046672983419672
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1554274367248371932}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4fab65f4dbf73a5458ede75a68d37d32, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hp: 5
 --- !u!1 &5853522598953672477
 GameObject:
   m_ObjectHideFlags: 0

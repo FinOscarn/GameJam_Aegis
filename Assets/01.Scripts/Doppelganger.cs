@@ -114,9 +114,13 @@ public class Doppelganger : MonoBehaviour
 
     void PlayerAtk()
     {
-        if (isCheckAtk)
+        if(DataManager.Instance.PlayerLv < DataManager.Instance.DoppelgangerLv)
         {
-            Monster = player;
+            isCheckAtk = true;
+            if (isCheckAtk)
+            {
+                Monster = player;
+            }
         }
     }
 
@@ -125,14 +129,7 @@ public class Doppelganger : MonoBehaviour
         if (DataManager.Instance.monsters.Count == 0)
         {
             Debug.LogError("ASDASDASD");
-            Vector2 dir = transform.position - player.transform.position;
-            float dist = dir.sqrMagnitude;
-            float direction = transform.position.x - player.transform.position.x > 0 ? 1 : -1;
-            sr.flipX = direction > 0 ? false : true;
-            if (dist > 10)
-            {
-                rb.velocity = new Vector2(direction * speed, rb.velocity.y);
-            }
+            
         }
     }
 
@@ -187,7 +184,7 @@ public class Doppelganger : MonoBehaviour
     
     public void DoppelgangerMove()
     {
-        if (isMove)
+        if (isMove && distance < 60 && DataManager.Instance.monsters.Count > 0)
         {
             monDir = Monster.transform.position.x - transform.position.x > 0 ? 1 : -1;
             sr.flipX = monDir > 0 ? false : true;
@@ -198,9 +195,19 @@ public class Doppelganger : MonoBehaviour
             Debug.Log(monDir);
             dir = monDir > 0 ? Vector2.right : Vector2.left;
         }
+        else if(DataManager.Instance.monsters.Count <= 0)
+        {
+            Vector2 dir = transform.position - player.transform.position;
+            float dist = dir.sqrMagnitude;
+            float direction = transform.position.x - player.transform.position.x > 0 ? 1 : -1;
+            sr.flipX = direction > 0 ? false : true;
+            if (dist > 5)
+            {
+                rb.velocity = new Vector2(direction * speed, rb.velocity.y);
+            }
+        }
     }
 
-    
     void Teleport()
     {
         int curTr = Mathf.RoundToInt(transform.position.x);
@@ -260,6 +267,5 @@ public class Doppelganger : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.DrawSphere((Vector2)transform.position + new Vector2(-0.4f, -0.8f), 0.3f);
-            
     }
 }

@@ -15,6 +15,8 @@ public class Title : MonoBehaviour
     public GameObject titlePanel;
     public GameObject selectPanel;
 
+    public GameObject gameOverPanel;
+
     void Start()
     {
         TitleText();
@@ -29,6 +31,11 @@ public class Title : MonoBehaviour
         });
     }
 
+    public void Update()
+    {
+        GameOverPanel();
+    }
+
     void TitleText()
     {
         TitleTxt.DOFade(0, 0.6f).SetEase(Ease.Linear).SetLoops(-1, LoopType.Yoyo);
@@ -37,6 +44,24 @@ public class Title : MonoBehaviour
     void Loading()
     {
         SceneManager.LoadScene("InGame");
+    }
+
+    void GameOverPanel()
+    {
+        if(Input.GetKey(KeyCode.Escape))
+        {
+            gameOverPanel.SetActive(true);
+        }
+    }
+
+    public void ExitGame()
+    {
+        Application.Quit();
+    }
+
+    public void Cancel()
+    {
+        gameOverPanel.SetActive(false);
     }
 
     public void TabPanel()

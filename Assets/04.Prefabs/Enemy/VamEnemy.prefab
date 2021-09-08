@@ -165,7 +165,6 @@ MonoBehaviour:
   states: 1
   PlayerObj: {fileID: 0}
   player: {fileID: 0}
-  hp: 4
   attackDamage: 0.2
   attackSpeed: 0
   moveSpeed: 4
@@ -177,6 +176,7 @@ MonoBehaviour:
   leftAtkPos: {fileID: 1730535314}
   boxSize: {x: 1.25, y: 2}
   distance: 0
+  entity: {fileID: 0}
 --- !u!61 &279956320829621706
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -255,4 +255,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4fab65f4dbf73a5458ede75a68d37d32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hp: 4
+  hp: 5
